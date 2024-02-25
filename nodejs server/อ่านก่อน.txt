@@ -1,0 +1,2 @@
+พิมพ์ใน cmd / terminal
+npm i express body-parser mysql bcryptjs
