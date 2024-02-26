@@ -142,20 +142,20 @@ Box(
             )
 
             ExpenseIconButton(
-                iconRes = R.drawable.ic_launcher_foreground,
+                iconRes = R.drawable.calendar_6540110,
                 label = "รายวัน",
                 onClick = { /*TODO*/ }
             )
 
 
             ExpenseIconButton(
-                iconRes = R.drawable.ic_launcher_foreground,
+                iconRes = R.drawable.bus_school,
                 label = "การจราจร",
                 onClick = { /*TODO*/ }
             )
 
             ExpenseIconButton(
-                iconRes = R.drawable.ic_launcher_foreground,
+                iconRes = R.drawable.toast,
                 label = "ทางสังคม",
                 onClick = { /*TODO*/ }
             )
@@ -168,25 +168,25 @@ Box(
 
 
             ExpenseIconButton(
-                iconRes = R.drawable.ic_launcher_foreground,
+                iconRes = R.drawable.house,
                 label = "ที่อยู่อาศัย",
                 onClick = { /*TODO*/ }
             )
 
             ExpenseIconButton(
-                iconRes = R.drawable.ic_launcher_foreground,
+                iconRes = R.drawable.gift,
                 label = "ของขวัญ",
                 onClick = { /*TODO*/ }
             )
 
             ExpenseIconButton(
-                iconRes = R.drawable.ic_launcher_foreground,
+                iconRes = R.drawable.chat,
                 label = "สื่อสาร",
                 onClick = { /*TODO*/ }
             )
 
             ExpenseIconButton(
-                iconRes = R.drawable.ic_launcher_foreground,
+                iconRes = R.drawable.clothes_rack,
                 label = "เสื้อผ้า",
                 onClick = { /*TODO*/ }
             )
@@ -194,9 +194,8 @@ Box(
         }
         Row {
 
-
             ExpenseIconButton(
-                iconRes = R.drawable.ic_launcher_foreground,
+                iconRes = R.drawable.settings,
                 label = "การตั้งค่า",
                 onClick = { /*TODO*/ }
             )
@@ -216,6 +215,7 @@ fun ExpenseIconButton(
     IconButton(
         onClick = onClick,
         modifier = Modifier.size(100.dp)
+
     ) {
         Box(
             modifier = Modifier
@@ -231,7 +231,8 @@ fun ExpenseIconButton(
         ) {
             Column(
                 verticalArrangement = Arrangement.Center,
-                //horizontalAlignment = Alignment.CenterHorizontally // เพิ่ม horizontalAlignment เพื่อจัดให้เนื้อหาอยู่กึ่งกลางในแนวนอน
+                horizontalAlignment = Alignment.CenterHorizontally
+                // เพิ่ม horizontalAlignment เพื่อจัดให้เนื้อหาอยู่กึ่งกลางในแนวนอน
             ) {
                 Image(
                     painter = painterResource(iconRes),
