@@ -3,6 +3,7 @@ package com.example.moneyhubandorid
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
+
 data class ProfileClass(
     @Expose
     @SerializedName("std_id") val std_id: String,
