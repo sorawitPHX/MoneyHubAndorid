@@ -41,9 +41,11 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,6 +60,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.example.moneyhubandorid.R
 import com.example.moneyhubandorid.Screen
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,6 +76,12 @@ fun FinanceScreen() {
     var selectedScreen by remember {
         mutableStateOf(0) // or use mutableStateOf(0)
     }
+    val coroutineScope = rememberCoroutineScope()
+
+//    LaunchedEffect(Unit) {
+//        ExpenseIconButtonRow()
+//        IncomeIconButtonRow()
+//    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -80,6 +89,7 @@ fun FinanceScreen() {
         // verticalArrangement = Arrangement.Center
     ) {
         CenterAlignedTopAppBar(
+
             title = {
                 /* ตัวอย่างเช่น */
             },
@@ -97,7 +107,9 @@ fun FinanceScreen() {
                 // ปุ่ม "ค่าใช้จ่าย"
                 Button(
                     onClick = {
-                        /* ตัวอย่างเช่น */
+                        coroutineScope.launch {
+
+                        }
                     }
                 ) {
                     Text("ค่าใช้จ่าย")
@@ -106,7 +118,7 @@ fun FinanceScreen() {
                 // ปุ่ม "รายได้"
                 Button(
                     onClick = {
-                        /* ตัวอย่างเช่น */
+                        /*TODO: ดำเนินการเมื่อคลิกปุ่มรายได้*/
                     }
                 ) {
                     Text("รายได้")
@@ -126,22 +138,14 @@ fun FinanceScreen() {
             )
         )
         Spacer(modifier = Modifier.height(16.dp))
-        ExpenseIconButtonRow()
+        ExpenseIconButtonRow()  //ของปุ่มรายจ่าย
         Spacer(modifier = Modifier.height(16.dp))
-        ExpenseIconButtonRow2()
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            ExpenseIconButton(
-                iconRes = R.drawable.settings,
-                label = "การตั้งค่า",
-                onClick = { /*TODO*/ }
-            )
-        }
+        IncomeIconButtonRow() //ของปุ่มรายได้
     }
 }
+
+
+
 
 @Composable
 fun ExpenseIconButtonRow() {
@@ -170,10 +174,6 @@ fun ExpenseIconButtonRow() {
             onClick = { /*TODO*/ }
         )
     }
-}
-
-@Composable
-fun ExpenseIconButtonRow2() {
     Row(
         horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier.fillMaxWidth()
@@ -199,8 +199,57 @@ fun ExpenseIconButtonRow2() {
             onClick = { /*TODO*/ }
         )
     }
-
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        ExpenseIconButton2(
+            iconRes = R.drawable.settings,
+            label = "การตั้งค่า",
+            onClick = { /*TODO*/ }
+        )
+    }
 }
+@Composable
+fun IncomeIconButtonRow() {
+    Row(
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        ExpenseIconButton(
+            iconRes = R.drawable._863884 ,
+            label = "ค่าจ้าง",
+            onClick = { /*TODO*/ },
+        )
+        ExpenseIconButton(
+            iconRes = R.drawable.earning,
+            label = "โบนัส",
+            onClick = { /*TODO*/ },
+        )
+        ExpenseIconButton(
+            iconRes = R.drawable._513536,
+            label = "การลงทุน",
+            onClick = { /*TODO*/ },
+        )
+        ExpenseIconButton(
+            iconRes = R.drawable._1630992,
+            label = "ไอที",
+            onClick = { /*TODO*/ }
+        )
+    }
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        ExpenseIconButton2(
+            iconRes = R.drawable.settings,
+            label = "การตั้งค่า",
+            onClick = { /*TODO*/ }
+        )
+    }
+}
+
+
 @Composable
 fun ExpenseIconButton(
     iconRes: Int,
@@ -238,6 +287,45 @@ fun ExpenseIconButton(
         }
     }
 }
+@Composable
+fun ExpenseIconButton2(
+    iconRes: Int,
+    label: String,
+    onClick: () -> Unit
+) {
+    IconButton(
+        onClick = onClick,
+        modifier = Modifier.size(100.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .padding(10.dp)
+                .size(120.dp)
+                .aspectRatio(1f)
+//                .align(Alignment.Start) // ปรับให้ชิดซ้าย
+        ) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    painter = painterResource(iconRes),
+                    contentDescription = null,
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.size(40.dp)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = label,
+                    fontSize = 15.sp,
+                    color = Color.Black,
+                )
+            }
+        }
+    }
+}
+
+
 
 
 
