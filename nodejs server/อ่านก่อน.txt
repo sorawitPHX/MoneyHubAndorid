@@ -2,6 +2,6 @@
     npm i express body-parser mysql bcryptjs
 
 2.  หากต้องการ node server.js
-2.1 ต้องสร้าง database ชื่อ "moneyhubandorid"
-2.2 นำไฟล์ชื่อ "moneyhubandroid.sql"(อยู๋ในโฟร์เดอร์ชื่อ database/moneyhubandorid.sql) และทำการ execute ใน phpmyadmin
-2.3 พิมพ์ node server.js ได้เลย
+    2.1 ต้องสร้าง database ชื่อ "moneyhubandorid"
+    2.2 นำไฟล์ชื่อ "moneyhubandroid.sql"(อยู๋ในโฟร์เดอร์ชื่อ database/moneyhubandorid.sql) และทำการ execute ใน phpmyadmin
+    2.3 พิมพ์ node server.js ได้เลย
