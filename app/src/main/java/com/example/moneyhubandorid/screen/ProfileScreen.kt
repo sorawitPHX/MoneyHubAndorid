@@ -33,7 +33,7 @@ import androidx.navigation.NavHostController
 import com.example.moneyhubandorid.ProfileClass
 import com.example.moneyhubandorid.Screen
 import com.example.moneyhubandorid.SharePreferencesManager
-import com.example.moneyhubandorid.StudentAPI
+import com.example.moneyhubandorid.api.StudentAPI
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

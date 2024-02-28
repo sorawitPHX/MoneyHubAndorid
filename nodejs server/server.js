@@ -99,6 +99,44 @@ app.post('/insertAccount', async function (req, res) {
     });
 });
 
+app.get('/getCareer', async (req, res)=> {
+    dbConn.query('SELECT * FROM careers', null, (error, results, fields)=>{
+        try {
+            if(error) throw error
+            if(results) {
+                return res.status(400).send({
+                    success : 1,
+                    results : results
+                })
+            }
+        } catch (error) {
+            return res.status(400).send({
+                success : 0,
+                results: error
+            })
+        }
+    })
+})
+
+app.get('/getGender', async (req, res)=> {
+    dbConn.query('SELECT * FROM genders', null, (error, results, fields)=>{
+        try {
+            if(error) throw error
+            if(results) {
+                return res.status(400).send({
+                    success : 1,
+                    results : results
+                })
+            }
+        } catch (error) {
+            return res.status(400).send({
+                success : 0,
+                results: error
+            })
+        }
+    })
+})
+
 
 //set port
 app.listen(3000, function () {

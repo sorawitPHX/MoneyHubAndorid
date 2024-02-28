@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 28, 2024 at 09:23 PM
+-- Generation Time: Feb 29, 2024 at 12:22 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -57,8 +57,10 @@ CREATE TABLE `careers` (
 --
 
 INSERT INTO `careers` (`idcareer`, `career`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'Student', '2024-02-27 20:12:27', '2024-02-27 20:12:27', NULL),
-(2, 'Business', '2024-02-27 20:12:27', '2024-02-27 20:12:27', NULL);
+(1, 'นักเรียน/นักศึกษา', '2024-02-27 20:12:27', '2024-02-28 23:01:24', '2024-02-28 23:01:24'),
+(2, 'ธุรกิจส่วนตัว', '2024-02-27 20:12:27', '2024-02-28 23:01:36', '2024-02-28 23:01:36'),
+(3, 'ข้าราชการ/พนักงานราชการ', '2024-02-28 23:02:09', '2024-02-28 23:02:09', NULL),
+(4, 'รับจ้าง', '2024-02-28 23:02:09', '2024-02-28 23:02:09', NULL);
 
 -- --------------------------------------------------------
 
@@ -95,8 +97,9 @@ CREATE TABLE `genders` (
 --
 
 INSERT INTO `genders` (`idgender`, `gender`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'Male', '2024-02-27 20:10:32', '2024-02-27 20:10:32', NULL),
-(2, 'Female', '2024-02-27 20:10:32', '2024-02-27 20:10:32', NULL);
+(1, 'ชาย', '2024-02-27 20:10:32', '2024-02-28 23:21:51', '2024-02-28 23:21:51'),
+(2, 'หญิง', '2024-02-27 20:10:32', '2024-02-28 23:21:55', '2024-02-28 23:21:55'),
+(3, 'อื่นๆ', '2024-02-28 22:46:29', '2024-02-28 23:22:00', '2024-02-28 23:22:00');
 
 -- --------------------------------------------------------
 
@@ -240,13 +243,13 @@ ALTER TABLE `users_has_categories`
 -- AUTO_INCREMENT for table `careers`
 --
 ALTER TABLE `careers`
-  MODIFY `idcareer` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idcareer` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `genders`
 --
 ALTER TABLE `genders`
-  MODIFY `idgender` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idgender` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`

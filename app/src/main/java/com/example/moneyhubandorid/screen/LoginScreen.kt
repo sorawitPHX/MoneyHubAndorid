@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavHostController
 import com.example.moneyhubandorid.LoginClass
-import com.example.moneyhubandorid.MoneyHubAPI
+import com.example.moneyhubandorid.api.MoneyHubAPI
 import com.example.moneyhubandorid.Screen
 import com.example.moneyhubandorid.SharePreferencesManager
 import retrofit2.Call
@@ -104,9 +104,10 @@ fun LoginScreen(navController: NavHostController) {
     ) {
 
         Text(
-            text = "MONEY HUB",
+            text = "MONEYHUB",
             fontSize = 25.sp
         )
+        Spacer(modifier = Modifier.height(24.dp))
 
         OutlinedTextField(
             value = userEmail,
@@ -114,7 +115,7 @@ fun LoginScreen(navController: NavHostController) {
                 userEmail = it
                 isButtonEnabled = !userEmail.isNullOrBlank() && !password.isNullOrEmpty()
             },
-            label = { Text("Email") },
+            label = { Text("อีเมล") },
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Person, contentDescription = null)
@@ -128,7 +129,7 @@ fun LoginScreen(navController: NavHostController) {
                 password = it
                 isButtonEnabled = !userEmail.isNullOrBlank() && !password.isNullOrEmpty()
             },
-            label = { Text("Enter your password") },
+            label = { Text("รหัสผ่าน") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done,
                 keyboardType = KeyboardType.Password
@@ -198,7 +199,7 @@ fun LoginScreen(navController: NavHostController) {
                 .fillMaxWidth()
                 .height(50.dp)
         ) {
-            Text("Login")
+            Text("เข้าสู่ระบบ")
         }
         Spacer(modifier = Modifier.height(16.dp))
         Row(
@@ -208,7 +209,7 @@ fun LoginScreen(navController: NavHostController) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            Text("Don't have an account?")
+            Text("คุณยังไม่มีบัญชีใช่หรือไม่?")
             TextButton(
                 onClick = {
                     keyboardController?.hide()
@@ -219,7 +220,7 @@ fun LoginScreen(navController: NavHostController) {
                     navController.navigate(Screen.Register.route)
                 }
             ) {
-                Text("Register")
+                Text("ลงทะเบียน")
             }
         }
     }
