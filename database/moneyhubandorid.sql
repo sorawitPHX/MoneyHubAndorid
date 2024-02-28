@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 26, 2024 at 10:44 PM
+-- Generation Time: Feb 28, 2024 at 09:23 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -52,6 +52,14 @@ CREATE TABLE `careers` (
   `deleted_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Dumping data for table `careers`
+--
+
+INSERT INTO `careers` (`idcareer`, `career`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Student', '2024-02-27 20:12:27', '2024-02-27 20:12:27', NULL),
+(2, 'Business', '2024-02-27 20:12:27', '2024-02-27 20:12:27', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -81,6 +89,14 @@ CREATE TABLE `genders` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deleted_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `genders`
+--
+
+INSERT INTO `genders` (`idgender`, `gender`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Male', '2024-02-27 20:10:32', '2024-02-27 20:10:32', NULL),
+(2, 'Female', '2024-02-27 20:10:32', '2024-02-27 20:10:32', NULL);
 
 -- --------------------------------------------------------
 
@@ -123,16 +139,23 @@ CREATE TABLE `users` (
   `iduser` int(11) NOT NULL,
   `firstname` varchar(255) NOT NULL,
   `lastname` varchar(255) NOT NULL,
-  `birthday` datetime NOT NULL,
+  `birthday` date NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `profile_photo_path` varchar(2048) NOT NULL,
+  `profile_photo_path` varchar(2048) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deleted_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
   `idcareer` int(11) NOT NULL,
   `idgender` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`iduser`, `firstname`, `lastname`, `birthday`, `email`, `password`, `profile_photo_path`, `created_at`, `updated_at`, `deleted_at`, `idcareer`, `idgender`) VALUES
+(1, 'Somchai', 'Boonrueng', '2003-11-27', 'somchai77@gmail.com', '$2a$10$qmibVJ//f/ovn91HyqMw/uQCg5nt7NOU1poTnK1H0nuzv8k82XuHi', NULL, '2024-02-27 20:13:39', '2024-02-27 20:13:39', NULL, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -223,13 +246,13 @@ ALTER TABLE `careers`
 -- AUTO_INCREMENT for table `genders`
 --
 ALTER TABLE `genders`
-  MODIFY `idgender` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idgender` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables

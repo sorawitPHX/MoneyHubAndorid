@@ -54,8 +54,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 //                    Greeting("Android")
-                    FinanceScreen()
-//                    MyScreen()
+//                    FinanceScreen()
+                    MyScreen()
 
                 }
             }
