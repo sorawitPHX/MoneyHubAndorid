@@ -1,6 +1,7 @@
 package com.example.moneyhubandorid.screen
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -36,6 +37,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,7 +58,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.moneyhubandorid.LoginClass
+import com.example.moneyhubandorid.Screen
 import com.example.moneyhubandorid.api.MoneyHubAPI
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -67,6 +74,23 @@ import java.util.Date
 fun RegisterScreen(navController: NavHostController) {
     val contextForToast = LocalContext.current
     val Client = MoneyHubAPI.create()
+    var id_careers = mapOf<String, Int>(
+        "นักเรียน/นักศึกษา" to 1,
+        "ธุรกิจส่วนตัว" to 2,
+        "ข้าราชการ/พนักงานราชการ" to 3,
+        "รับจ้าง" to 4
+    )
+    var id_genders = mapOf<String, Int>(
+        "ชาย" to 1,
+        "หญิง" to 2,
+        "อื่นๆ" to 3
+    )
+    var idgender by remember {
+        mutableIntStateOf(0)
+    }
+    var idcareer by remember {
+        mutableIntStateOf(0)
+    }
     var firstname by remember {
         mutableStateOf("")
     }
@@ -88,8 +112,8 @@ fun RegisterScreen(navController: NavHostController) {
     var careername by remember {
         mutableStateOf("")
     }
-    var date by remember {
-        mutableLongStateOf(0)
+    var birthday by remember {
+        mutableStateOf("")
     }
 
     var isButtonEnabled by remember {
@@ -195,7 +219,7 @@ fun RegisterScreen(navController: NavHostController) {
         )
         Spacer(modifier = Modifier.height(16.dp))
 
-        date = DateContent()
+        birthday = DateContent()
 
         gender = genderRadioGroupUsage()
         Spacer(modifier = Modifier.height(16.dp))
@@ -206,44 +230,46 @@ fun RegisterScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
-//                keyboardController?.hide()
-//                focusManager.clearFocus()
-//                Client.registerStudent(firstname, name, password, gender)
-//                    .enqueue(object : Callback<LoginClass> {
-//
-//                        @SuppressLint("RestrictedApi")
-//                        override fun onResponse(
-//                            call: Call<LoginClass>,
-//                            response: Response<LoginClass>
-//                        ) {
-//                            if (response.isSuccessful) {
-//                                Toast.makeText(
-//                                    contextForToast,
-//                                    "Register successfully",
-//                                    Toast.LENGTH_LONG
-//                                ).show()
-//                                if (navController.currentBackStack.value.size >= 2) {
-//                                    navController.popBackStack()
-//                                }
-//                                navController.navigate(Screen.Login.route)
-//                            } else {
-//                                Toast.makeText(
-//                                    contextForToast,
-//                                    "Register Failed",
-//                                    Toast.LENGTH_LONG
-//                                ).show()
-//                            }
-//                        }
-//
-//                        override fun onFailure(call: Call<LoginClass>, t: Throwable) {
-//                            Toast.makeText(
-//                                contextForToast,
-//                                "Error inFailure ${t.message}",
-//                                Toast.LENGTH_LONG
-//                            ).show()
-//                        }
-//
-//                    })
+                keyboardController?.hide()
+                focusManager.clearFocus()
+                idcareer = id_careers[careername]!!
+                idgender = id_genders[gender]!!
+                Client.registerUser(firstname, lastname, birthday, email, password, idcareer, idgender)
+                    .enqueue(object : Callback<LoginClass> {
+
+                        @SuppressLint("RestrictedApi")
+                        override fun onResponse(
+                            call: Call<LoginClass>,
+                            response: Response<LoginClass>
+                        ) {
+                            if (response.isSuccessful) {
+                                Toast.makeText(
+                                    contextForToast,
+                                    "Register successfully",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                if (navController.currentBackStack.value.size >= 2) {
+                                    navController.popBackStack()
+                                }
+                                navController.navigate(Screen.Login.route)
+                            } else {
+                                Toast.makeText(
+                                    contextForToast,
+                                    "Register Failed",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+
+                        override fun onFailure(call: Call<LoginClass>, t: Throwable) {
+                            Toast.makeText(
+                                contextForToast,
+                                "Error inFailure ${t.message}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+
+                    })
             },
             enabled = isButtonEnabled,
             modifier = Modifier
@@ -317,7 +343,7 @@ fun genderRadioGroupUsage(): String {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DateContent(): Long {
+fun DateContent(): String {
     var calendar = Calendar.getInstance()
     var mYear = calendar.get(Calendar.YEAR)
     var mMonth = calendar.get(Calendar.MONTH)
@@ -343,14 +369,14 @@ fun DateContent(): Long {
                     showDatePicker = false
                     selectedDate = datePickerState.selectedDateMillis!!
                 }) {
-                    Text(text = "Confirm")
+                    Text(text = "ยืนยัน")
                 }
             },
             dismissButton = {
                 TextButton(onClick = {
                     showDatePicker = false
                 }) {
-                    Text(text = "Cancel")
+                    Text(text = "ยกเลิก")
                 }
             }
         ) {
@@ -378,9 +404,9 @@ fun DateContent(): Long {
             )
         }
         var formatter = SimpleDateFormat("dd-MMM-yyy")
-        Text(text = "Date: ${formatter.format(Date(selectedDate))}")
+        Text(text = "วันที่ ${formatter.format(Date(selectedDate))}")
     }
-    return selectedDate
+    return SimpleDateFormat("yyyy-MM-dd").format(Date(selectedDate))
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

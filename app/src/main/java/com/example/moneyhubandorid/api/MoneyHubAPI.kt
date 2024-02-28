@@ -24,8 +24,8 @@ interface MoneyHubAPI {
         @Field("birthday") birthday: String,
         @Field("email") email: String,
         @Field("password") password: String,
-        @Field("idcareer") idcareer: String,
-        @Field("idgender") idgender: String
+        @Field("idcareer") idcareer: Int,
+        @Field("idgender") idgender: Int
     ): Call<LoginClass>
 
 //    @GET("search/{std_id}")
