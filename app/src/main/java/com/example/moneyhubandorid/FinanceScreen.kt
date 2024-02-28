@@ -217,7 +217,7 @@ fun IncomeIconButtonRow() {
         modifier = Modifier.fillMaxWidth()
     ) {
         ExpenseIconButton(
-            iconRes = R.drawable._863884 ,
+            iconRes = R.drawable.wages ,
             label = "ค่าจ้าง",
             onClick = { /*TODO*/ },
         )
@@ -227,12 +227,12 @@ fun IncomeIconButtonRow() {
             onClick = { /*TODO*/ },
         )
         ExpenseIconButton(
-            iconRes = R.drawable._513536,
+            iconRes = R.drawable.investing,
             label = "การลงทุน",
             onClick = { /*TODO*/ },
         )
         ExpenseIconButton(
-            iconRes = R.drawable._1630992,
+            iconRes = R.drawable.consultant,
             label = "ไอที",
             onClick = { /*TODO*/ }
         )
