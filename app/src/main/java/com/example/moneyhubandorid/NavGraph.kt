@@ -4,6 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.moneyhubandorid.screen.LoginScreen
+import com.example.moneyhubandorid.screen.ProfileScreen
+import com.example.moneyhubandorid.screen.RegisterScreen
 
 @Composable
 fun NavGraph(

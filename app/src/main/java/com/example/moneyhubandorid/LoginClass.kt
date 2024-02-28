@@ -8,5 +8,5 @@ data class LoginClass(
     @SerializedName("success") val success: Int,
 
     @Expose
-    @SerializedName("std_id") val std_id: String
+    @SerializedName("iduser") val iduser: String
     )

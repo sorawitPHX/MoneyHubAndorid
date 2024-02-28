@@ -1,4 +1,4 @@
-package com.example.moneyhubandorid
+package com.example.moneyhubandorid.screen
 
 import android.annotation.SuppressLint
 import android.widget.Toast
@@ -30,6 +30,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavHostController
+import com.example.moneyhubandorid.ProfileClass
+import com.example.moneyhubandorid.Screen
+import com.example.moneyhubandorid.SharePreferencesManager
+import com.example.moneyhubandorid.StudentAPI
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

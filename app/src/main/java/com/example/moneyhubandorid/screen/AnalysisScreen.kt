@@ -1,4 +1,4 @@
-package com.example.project_1
+package com.example.moneyhubandorid.screen
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement

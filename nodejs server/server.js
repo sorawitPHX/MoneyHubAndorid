@@ -50,6 +50,7 @@ app.post('/login', async function (req, res) {
             bcrypt.compare(password, results[0].password, function (error, result) {
                 if (error) throw error;
                 if (result) {
+                console.log(results[0])
                     return res.send({
                         "success": 1, "iduser": results[0].iduser ,"email": results[0].email, "firstname": results[0].firstname,
                         "lastname": results[0].lastname, "birthday": results[0].birthday, "profile_photo_path": results[0].profile_photo_path,
