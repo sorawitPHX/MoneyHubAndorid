@@ -36,13 +36,12 @@ app.post('/user', function(req, res) {
     });
 });
 
-app.get('/login', async function(req, res) {
-
+app.post('/login', async function(req, res) {
     let email = req.body.email;
     let password = req.body.password;
 
     if(!email || !password) {
-        return res.status(400).send({ error: user, message: 'Please provide student id and password.' });
+        return res.status(400).send({ "success": 0, "message" : 'Please provide student id and password.' });
     }
 
     dbConn.query('SELECT * FROM users WHERE email = ?', [email], function(error, results, fields) {
@@ -65,7 +64,6 @@ app.get('/login', async function(req, res) {
 });
 
 app.post('/insertAccount', async function(req, res) {
-
     let post = req.body;
     let firstname = post.firstname;
     let lastname = post.lastname;
