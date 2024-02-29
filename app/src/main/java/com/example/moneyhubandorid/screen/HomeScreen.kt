@@ -45,6 +45,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.moneyhubandorid.AppBar.BottomBar
 import com.example.moneyhubandorid.NavGraph
 import com.example.moneyhubandorid.Screen
 import com.example.moneyhubandorid.SharePreferencesManager
@@ -72,7 +73,7 @@ fun HomeScreen(navController: NavHostController) {
     }
     Scaffold(
         bottomBar = {
-            MyBottomBar(navController, contextForToast)
+            BottomBar(navController, contextForToast)
         },
         floatingActionButtonPosition = FabPosition.End,
     ) { paddingValues ->
@@ -97,36 +98,6 @@ fun HomeScreen(navController: NavHostController) {
         }
     }
 
-}
-
-@Composable
-fun MyBottomBar(navController: NavController, contextForToast: Context) {
-    val navigationItems = listOf(
-        Screen.Home,
-        Screen.Finance,
-        Screen.Analysis,
-        Screen.Profile,
-    )
-    var selectedScreen by remember {
-        mutableStateOf(0) // or use mutableStateOf(0)
-    }
-    NavigationBar {
-        navigationItems.forEachIndexed { index, screen ->
-            NavigationBarItem(
-                icon = { Icon(imageVector = screen.icon, contentDescription = null) },
-                label = { Text(text = screen.name) },
-                selected = (selectedScreen == index),
-                onClick = { //this if condition keeps only one screen in the back stack
-                    if (navController.currentBackStack.value.size >= 2) {
-                        navController.popBackStack()
-                    }
-                    selectedScreen = index
-                    navController.navigate(screen.route)
-                    Toast.makeText(contextForToast, screen.name, Toast.LENGTH_SHORT).show()
-                }
-            )
-        }
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

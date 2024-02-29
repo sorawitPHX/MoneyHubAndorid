@@ -52,7 +52,7 @@ fun NavGraph(
             AnalysisScreen(navController)
         }
 
-        composable(route = Screen.Espense.route
+        composable(route = Screen.Expense.route
         ) {
             Espense(navController)
         }
