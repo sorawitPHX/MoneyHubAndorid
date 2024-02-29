@@ -5,6 +5,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Analytics
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Login
+import androidx.compose.material.icons.filled.MonetizationOn
 import androidx.compose.material.icons.filled.Money
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -18,4 +19,8 @@ sealed class Screen (val route: String, val name: String, val icon: ImageVector)
     object Analysis: Screen(route = "analysis_screen", name = "Analysis", icon = Icons.Default.Analytics)
     object Income: Screen(route = "income_screen", name = "Income", icon = Icons.Default.Money)
     object Expense: Screen(route = "Expense_screen", name = "Expense", icon = Icons.Default.Money)
+
+    object Summary: Screen(route = "summary_screen", name = "Summary", icon = Icons.Default.MonetizationOn)
+
+
 }
