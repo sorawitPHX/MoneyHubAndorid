@@ -60,7 +60,7 @@ fun FinanceScreen(navController: NavHostController) {
 
     Scaffold(
         topBar = {
-            FinanceTopAppBar(navController, contextForToast)
+//            FinanceTopAppBar(navController, contextForToast)
         },
         bottomBar = {
             BottomBar(navController, contextForToast)
