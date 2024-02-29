@@ -2,7 +2,11 @@ package com.example.moneyhubandorid.screen
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +14,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Home
@@ -21,6 +28,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
@@ -44,6 +52,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
@@ -89,33 +103,40 @@ fun HomeScreen(navController: NavHostController) {
                 },
                 actions = {
                     // Notifications Icon
-                    IconButton(
-                        onClick = {
-                            Toast.makeText(contextForToast, "Notifications", Toast.LENGTH_SHORT).show()
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.NotificationsNone,
-                            contentDescription = "Notifications"
-                        )
-                    }
+//                    IconButton(
+//                        onClick = {
+//                            Toast.makeText(contextForToast, "Notifications", Toast.LENGTH_SHORT).show()
+//                        }
+//                    ) {
+//                        Icon(
+//                            imageVector = Icons.Outlined.NotificationsNone,
+//                            contentDescription = "Notifications"
+//                        )
+//                    }
 
                     // Home Icon
-                    IconButton(
-                        onClick = {
-                            Toast.makeText(contextForToast, "Home", Toast.LENGTH_SHORT).show()
-                        }
-                    ) {
-                        Icon(imageVector = Icons.Outlined.Home, contentDescription = "Home")
-                    }
+//                    IconButton(
+//                        onClick = {
+//                            Toast.makeText(contextForToast, "Home", Toast.LENGTH_SHORT).show()
+//                        }
+//                    ) {
+//                        Icon(imageVector = Icons.Outlined.Home, contentDescription = "Home")
+//                    }
 
                     // Vertical 3 dots icon
-                    IconButton(
-                        onClick = {
-                            // handle click
-                        }
-                    ) {
-                        Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Open Menu")
+//                    IconButton(
+//                        onClick = {
+//                            // handle click
+//                        }
+//                    ) {
+//                        Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Open Menu")
+//                    }
+                    TextButton(onClick = { /*TODO*/ }) {
+                        Text(
+                            text = "รายละเอียด",
+                            modifier = Modifier
+                                .background(Color.White) // กำหนดกรอบให้กับข้อความ
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -163,27 +184,6 @@ fun MyTopAppBar(navController: NavHostController, contextForToast: Context) {
             Text(text = "สมุดบันทึกเริ่มต้น")
         },
         actions = {
-            // Notifications Icon
-            IconButton(
-                onClick = {
-                    Toast.makeText(contextForToast, "Notifications", Toast.LENGTH_SHORT).show()
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.NotificationsNone,
-                    contentDescription = "Notifications"
-                )
-            }
-
-            // Home Icon
-            IconButton(
-                onClick = {
-                    Toast.makeText(contextForToast, "Home", Toast.LENGTH_SHORT).show()
-                }
-            ) {
-                Icon(imageVector = Icons.Outlined.Home, contentDescription = "Home")
-            }
-
             // Vertical 3 dots icon
             IconButton(
                 onClick = {
@@ -312,27 +312,134 @@ fun TopAppBarHome (navController: NavHostController){
             Spacer(modifier = Modifier.height(16.dp))
             //ของปุ่มรายจ่าย
             Text(text = "หน้าเพิ่มรรายจ่าย")
-            notebook_diary() //ของปุ่มรายได้
+            notebook_diary()
+
+
+
+            // Spacer to create separation
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Summary Text
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 100.dp,
+                        bottom = 20.dp
+                    )
+                    .background(
+                        color = Color.Green.copy(alpha = 0.1f),
+                        shape = RoundedCornerShape(16.dp)
+                    )
+                    .padding(16.dp),
+                text = "ยอดรวมทุกบัญชี : 0 ฿\nรายได้ : 0 ฿\nค่าใช้จ่าย : 0 ฿",
+                textAlign = TextAlign.Center,
+                color = Color.Black
+            )
+
+            // Row with Buttons and Icons
+
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 350.dp,
+                        bottom = 20.dp
+                    )
+                    .background(
+                        color = Color.Green.copy(alpha = 0.1f),
+                        shape = RoundedCornerShape(16.dp)
+                    )
+                    .padding(25.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Use a Box to position the image at the top-left corner
+                Box(
+                    modifier = Modifier
+                        .size(60.dp)
+                ) {
+                    // Icon
+                    Image(
+                        painter = painterResource(id = R.drawable.book),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+
+                // Text
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(
+                                color = Color.Black,
+                                fontWeight = FontWeight.Bold
+                            )
+                        ) {
+                            append(" สมุดบันทึกเริ่มต้น\n")
+                        }
+
+                        withStyle(
+                            style = SpanStyle(
+                                color = Color.Black
+                            )
+                        ) {
+                            append(" จำนวนเงินทั้งหมด : 0 ฿\n")
+                        }
+
+                        withStyle(
+                            style = SpanStyle(
+                                color = Color.Black
+                            )
+                        ) {
+                            append(" รายได้ : 0 ฿\n")
+                            append(" ค่าใช้จ่าย : 0 ฿\n")
+                        }
+                    },
+                    textAlign = TextAlign.Center,
+                    color = Color.Black,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
+        }
         }
     }
-}
+
 @Composable
 fun notebook_diary() {
     Row(
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = Modifier.fillMaxWidth()
+        horizontalArrangement = Arrangement.Start,
+        modifier = Modifier.size(200.dp)
     ) {
         ExpenseIconButton(
             iconRes = R.drawable.book ,
             label = "สมุดบันทึกแล่ม1",
             onClick = { /*TODO*/ },
+//            modifier = Modifier.size(100.dp) // กำหนดขนาดของปุ่ม
         )
         ExpenseIconButton(
             iconRes = R.drawable.story,
             label = "เพื่มสมุด",
             onClick = { /*TODO*/ },
-        )
 
+        )
     }
 }
+
+@Composable
+fun monthly_finances() {
+    Row(
+        horizontalArrangement = Arrangement.Start,
+        modifier = Modifier.size(200.dp)
+    ) {
+
+        IconButton(
+            onClick = {
+            }
+        ) {
+            Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Open Menu")
+        }
+    }
+}
+
 
