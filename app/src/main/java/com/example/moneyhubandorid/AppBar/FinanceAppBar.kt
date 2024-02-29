@@ -121,7 +121,7 @@ fun FinanceTopAppBar(navController: NavHostController, contextForToast: Context)
             }
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color.Blue.copy(alpha = 0.3f)
+            containerColor = Color.Green.copy(alpha = 0.3f)
         )
     )
 }
