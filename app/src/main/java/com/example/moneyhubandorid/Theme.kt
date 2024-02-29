@@ -68,6 +68,7 @@ fun Lab6MenuTheme(
         }
     }
 
+
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
