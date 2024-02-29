@@ -66,7 +66,7 @@ fun income(navController: NavHostController){
 
             Spacer(modifier = Modifier.height(16.dp))
             //ของปุ่มรายจ่าย
-            Text(text = "หน้าเพิ่มรรายจ่าย")
+            Text(text = "หน้าเพิ่มรายรับ")
             IncomeIconButtonRow() //ของปุ่มรายได้
         }
     }

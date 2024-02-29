@@ -65,7 +65,7 @@ fun HomeScreen(navController: NavHostController) {
             Lifecycle.State.CREATED -> {}
             Lifecycle.State.STARTED -> {}
             Lifecycle.State.RESUMED -> {
-                if (sharePreferences.isLoggedIn) {
+                if (!sharePreferences.isLoggedIn) {
 
                 }
             }
@@ -93,11 +93,8 @@ fun HomeScreen(navController: NavHostController) {
                 Text(text = "Home Screen area")
                 Text(text = "${sharePreferences.isLoggedIn}")
             }
-//                NavGraph(navController = navController)
-//            Text(text = sharePreferences.isLoggedIn.toString())
         }
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
