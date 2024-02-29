@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 29, 2024 at 07:33 PM
+-- Generation Time: Mar 01, 2024 at 12:22 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -43,7 +43,8 @@ CREATE TABLE `account_books` (
 --
 
 INSERT INTO `account_books` (`idaccount_book`, `iduser`, `account_book`, `balance`, `account_photo_path`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 8, 'สมุดบันทึกเริ่มต้น', 0.00, NULL, '2024-02-29 18:31:32', '2024-02-29 18:31:32', NULL);
+(1, 8, 'สมุดบันทึกเริ่มต้น', 0.00, NULL, '2024-02-29 18:31:32', '2024-02-29 18:31:32', NULL),
+(2, 8, 'ลูกชาย', 0.00, NULL, '2024-02-29 21:20:46', '2024-02-29 21:20:46', NULL);
 
 -- --------------------------------------------------------
 
@@ -85,6 +86,24 @@ CREATE TABLE `categories` (
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`idcategory`, `idtransaction_types`, `category`, `cate_photo_path`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'ค่าจ้าง', NULL, '2024-02-29 21:01:56', '2024-02-29 21:01:56', NULL),
+(2, 1, 'โบนัส', NULL, '2024-02-29 21:01:56', '2024-02-29 21:01:56', NULL),
+(3, 1, 'การลงทุน', NULL, '2024-02-29 21:01:56', '2024-02-29 21:01:56', NULL),
+(4, 1, 'โอที', NULL, '2024-02-29 21:01:56', '2024-02-29 21:01:56', NULL),
+(5, 2, 'อาหาร', NULL, '2024-02-29 21:05:55', '2024-02-29 21:05:55', NULL),
+(6, 2, 'รายวัน', NULL, '2024-02-29 21:05:55', '2024-02-29 21:05:55', NULL),
+(7, 2, 'การจราจร', NULL, '2024-02-29 21:05:55', '2024-02-29 21:05:55', NULL),
+(8, 2, 'ทางสังคม', NULL, '2024-02-29 21:05:55', '2024-02-29 21:05:55', NULL),
+(9, 2, 'ที่อยู่อาศัย', NULL, '2024-02-29 21:05:55', '2024-02-29 21:05:55', NULL),
+(10, 2, 'ของขวัญ', NULL, '2024-02-29 21:05:55', '2024-02-29 21:05:55', NULL),
+(11, 2, 'สื่อสาร', NULL, '2024-02-29 21:05:55', '2024-02-29 21:05:55', NULL),
+(12, 2, 'เสื้อผ้า', NULL, '2024-02-29 21:05:55', '2024-02-29 21:05:55', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -125,6 +144,15 @@ CREATE TABLE `transactions` (
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Dumping data for table `transactions`
+--
+
+INSERT INTO `transactions` (`idtransaction`, `idaccount_book`, `idcategory`, `amount`, `description`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 3, 65000.00, 'กำไรจากการซื้อหุ้นต่างประเทศ', '2024-02-29 21:35:54', '2024-02-29 21:35:54', NULL),
+(2, 1, 10, 10000.00, 'ซื้อของขวัญให้แฟน', '2024-02-29 21:35:54', '2024-02-29 22:57:30', NULL),
+(3, 1, 9, 5000.00, 'ค่าเช่าหอพัก', '2024-02-29 21:50:45', '2024-02-29 21:50:45', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -138,6 +166,14 @@ CREATE TABLE `transactions_types` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `transactions_types`
+--
+
+INSERT INTO `transactions_types` (`idtransaction_types`, `type`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'รายรับ', '2024-02-29 19:28:14', '2024-02-29 19:28:14', NULL),
+(2, 'รายจ่าย', '2024-02-29 19:28:14', '2024-02-29 19:28:14', NULL);
 
 -- --------------------------------------------------------
 
@@ -257,7 +293,7 @@ ALTER TABLE `users_has_categories`
 -- AUTO_INCREMENT for table `account_books`
 --
 ALTER TABLE `account_books`
-  MODIFY `idaccount_book` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idaccount_book` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `careers`
@@ -269,7 +305,7 @@ ALTER TABLE `careers`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `idcategory` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idcategory` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `genders`
@@ -281,13 +317,13 @@ ALTER TABLE `genders`
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `idtransaction` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idtransaction` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `transactions_types`
 --
 ALTER TABLE `transactions_types`
-  MODIFY `idtransaction_types` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idtransaction_types` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
