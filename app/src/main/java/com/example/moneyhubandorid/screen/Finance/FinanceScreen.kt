@@ -57,20 +57,10 @@ import kotlinx.coroutines.launch
 
 fun FinanceScreen(navController: NavHostController) {
     val contextForToast = LocalContext.current
-    var expanded by remember { mutableStateOf(false) }
-    val navigationItems = listOf(
-        Screen.Home,
-        Screen.Finance,
-        Screen.Analysis,
-        Screen.Profile,
-    )
-    var selectedScreen by remember {
-        mutableStateOf(0) // or use mutableStateOf(0)
-    }
 
     Scaffold(
         topBar = {
-//            FinanceTopAppBar(navController, contextForToast)
+            FinanceTopAppBar(navController, contextForToast)
         },
         bottomBar = {
             BottomBar(navController, contextForToast)

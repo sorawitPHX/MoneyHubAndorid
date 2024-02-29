@@ -5,7 +5,10 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -41,15 +44,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.moneyhubandorid.AppBar.BottomBar
+import com.example.moneyhubandorid.AppBar.FinanceTopAppBar
 import com.example.moneyhubandorid.NavGraph
+import com.example.moneyhubandorid.R
 import com.example.moneyhubandorid.Screen
 import com.example.moneyhubandorid.SharePreferencesManager
+import com.example.moneyhubandorid.screen.Finance.ExpenseIconButton
+import com.example.moneyhubandorid.screen.Finance.ExpenseIconButton2
+import com.example.moneyhubandorid.screen.Finance.IncomeIconButtonRow
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavHostController) {
     val contextForToast = LocalContext.current.applicationContext
@@ -65,12 +75,54 @@ fun HomeScreen(navController: NavHostController) {
             Lifecycle.State.CREATED -> {}
             Lifecycle.State.STARTED -> {}
             Lifecycle.State.RESUMED -> {
-                if (!sharePreferences.isLoggedIn) {
+                if (sharePreferences.isLoggedIn) {
+
                 }
             }
         }
     }
     Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(text = "สมุดบันทึกเริ่มต้น")
+                },
+                actions = {
+                    // Notifications Icon
+                    IconButton(
+                        onClick = {
+                            Toast.makeText(contextForToast, "Notifications", Toast.LENGTH_SHORT).show()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.NotificationsNone,
+                            contentDescription = "Notifications"
+                        )
+                    }
+
+                    // Home Icon
+                    IconButton(
+                        onClick = {
+                            Toast.makeText(contextForToast, "Home", Toast.LENGTH_SHORT).show()
+                        }
+                    ) {
+                        Icon(imageVector = Icons.Outlined.Home, contentDescription = "Home")
+                    }
+
+                    // Vertical 3 dots icon
+                    IconButton(
+                        onClick = {
+                            // handle click
+                        }
+                    ) {
+                        Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Open Menu")
+                    }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color.Green.copy(alpha = 0.3f)
+                )
+            )
+        },
         bottomBar = {
             BottomBar(navController, contextForToast)
         },
@@ -84,16 +136,14 @@ fun HomeScreen(navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(text = "Home Screen area")
-            }
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(text = "หน้าเพิ่มรรายจ่าย")
+            notebook_diary()
         }
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -110,7 +160,7 @@ fun MyTopAppBar(navController: NavHostController, contextForToast: Context) {
     }
     CenterAlignedTopAppBar(
         title = {
-            Text(text = "My Application")
+            Text(text = "สมุดบันทึกเริ่มต้น")
         },
         actions = {
             // Notifications Icon
@@ -231,5 +281,58 @@ fun MyTopAppBar(navController: NavHostController, contextForToast: Context) {
             containerColor = Color.Green.copy(alpha = 0.3f)
         )
     )
+
+
+
+}
+
+
+@Composable
+fun TopAppBarHome (navController: NavHostController){
+    val contextForToast = LocalContext.current
+
+    Scaffold(
+        topBar = {
+            FinanceTopAppBar(navController, contextForToast)
+        },
+        bottomBar = {
+            BottomBar(navController, contextForToast)
+        },
+        floatingActionButtonPosition = FabPosition.End,
+    ){ paddingValues ->
+        Column(
+            modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(paddingValues = paddingValues),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            // verticalArrangement = Arrangement.Center
+        ) {
+
+            Spacer(modifier = Modifier.height(16.dp))
+            //ของปุ่มรายจ่าย
+            Text(text = "หน้าเพิ่มรรายจ่าย")
+            notebook_diary() //ของปุ่มรายได้
+        }
+    }
+}
+@Composable
+fun notebook_diary() {
+    Row(
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        ExpenseIconButton(
+            iconRes = R.drawable.book ,
+            label = "สมุดบันทึกแล่ม1",
+            onClick = { /*TODO*/ },
+        )
+        ExpenseIconButton(
+            iconRes = R.drawable.story,
+            label = "เพื่มสมุด",
+            onClick = { /*TODO*/ },
+        )
+
+    }
 }
 
