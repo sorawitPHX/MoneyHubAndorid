@@ -4,6 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.moneyhubandorid.screen.AnalysisScreen
+import com.example.moneyhubandorid.screen.FinanceScreen
+import com.example.moneyhubandorid.screen.HomeScreen
+import com.example.moneyhubandorid.screen.LoginScreen
+import com.example.moneyhubandorid.screen.ProfileScreen
+import com.example.moneyhubandorid.screen.RegisterScreen
 
 @Composable
 fun NavGraph(
@@ -29,20 +35,20 @@ fun NavGraph(
             ProfileScreen(navController)
         }
 
-//        composable(route = Screen.Home.route
-//        ) {
-//            HomeScreen(navController)
-//        }
-//
-//        composable(route = Finance.Home.route
-//        ) {
-//            FinanceScreen(navController)
-//        }
-//
-//        composable(route = Analysis.Home.route
-//        ) {
-//            AnalysisScreen(navController)
-//        }
+        composable(route = Screen.Home.route
+        ) {
+            HomeScreen(navController)
+        }
+
+        composable(route = Screen.Finance.route
+        ) {
+            FinanceScreen(navController)
+        }
+
+        composable(route = Screen.Analysis.route
+        ) {
+            AnalysisScreen(navController)
+        }
 
 
 

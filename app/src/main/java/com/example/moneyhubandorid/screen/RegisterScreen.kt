@@ -1,7 +1,8 @@
-package com.example.moneyhubandorid
+package com.example.moneyhubandorid.screen
 
 import android.annotation.SuppressLint
 import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,10 +11,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
@@ -21,7 +23,10 @@ import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -32,6 +37,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +49,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -51,6 +58,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.moneyhubandorid.LoginClass
+import com.example.moneyhubandorid.Screen
+import com.example.moneyhubandorid.api.MoneyHubAPI
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -63,23 +73,48 @@ import java.util.Date
 @Composable
 fun RegisterScreen(navController: NavHostController) {
     val contextForToast = LocalContext.current
-    val Client = StudentAPI.create()
-    var studentID by remember {
+    val Client = MoneyHubAPI.create()
+    var id_careers = mapOf<String, Int>(
+        "นักเรียน/นักศึกษา" to 1,
+        "ธุรกิจส่วนตัว" to 2,
+        "ข้าราชการ/พนักงานราชการ" to 3,
+        "รับจ้าง" to 4
+    )
+    var id_genders = mapOf<String, Int>(
+        "ชาย" to 1,
+        "หญิง" to 2,
+        "อื่นๆ" to 3
+    )
+    var idgender by remember {
+        mutableIntStateOf(0)
+    }
+    var idcareer by remember {
+        mutableIntStateOf(0)
+    }
+    var firstname by remember {
+        mutableStateOf("")
+    }
+    var lastname by remember {
+        mutableStateOf("")
+    }
+    var email by remember {
         mutableStateOf("")
     }
     var password by remember {
         mutableStateOf("")
     }
+    var password_confirm by remember {
+        mutableStateOf("")
+    }
     var gender by remember {
         mutableStateOf("")
     }
-    var name by remember {
+    var careername by remember {
         mutableStateOf("")
     }
-    var date by remember {
-        mutableLongStateOf(0)
+    var birthday by remember {
+        mutableStateOf("")
     }
-
 
     var isButtonEnabled by remember {
         mutableStateOf(false)
@@ -88,25 +123,35 @@ fun RegisterScreen(navController: NavHostController) {
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    var logoutDialog by remember{mutableStateOf(false)}
-
+    var logoutDialog by remember { mutableStateOf(false) }
+    val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(16.dp)
+            .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Register", fontSize = 25.sp)
+        Text(text = "ลงทะเบียน", fontSize = 25.sp)
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
-            value = studentID,
+            value = firstname,
             onValueChange = {
-                studentID = it
-                isButtonEnabled = !studentID.isNullOrBlank() && !password.isNullOrEmpty()
+                firstname = it
+                isButtonEnabled = validateInput(
+                    firstname,
+                    lastname,
+                    birthday,
+                    email,
+                    password,
+                    password_confirm,
+                    careername,
+                    gender
+                )
             },
-            label = { Text("Name") },
+            label = { Text("ชื่อ") },
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Person, contentDescription = null)
@@ -116,12 +161,21 @@ fun RegisterScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
-            value = studentID,
+            value = lastname,
             onValueChange = {
-                studentID = it
-                isButtonEnabled = !studentID.isNullOrBlank() && !password.isNullOrEmpty()
+                lastname = it
+                isButtonEnabled = validateInput(
+                    firstname,
+                    lastname,
+                    birthday,
+                    email,
+                    password,
+                    password_confirm,
+                    careername,
+                    gender
+                )
             },
-            label = { Text("last name") },
+            label = { Text("นามสกุล") },
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Person, contentDescription = null)
@@ -131,12 +185,21 @@ fun RegisterScreen(navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
-            value = studentID,
+            value = email,
             onValueChange = {
-                studentID = it
-                isButtonEnabled = !studentID.isNullOrBlank() && !password.isNullOrEmpty()
+                email = it
+                isButtonEnabled = validateInput(
+                    firstname,
+                    lastname,
+                    birthday,
+                    email,
+                    password,
+                    password_confirm,
+                    careername,
+                    gender
+                )
             },
-            label = { Text("E-mail") },
+            label = { Text("อีเมล") },
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Email, contentDescription = null)
@@ -149,9 +212,18 @@ fun RegisterScreen(navController: NavHostController) {
             value = password,
             onValueChange = {
                 password = it
-                isButtonEnabled = !studentID.isNullOrBlank() && !password.isNullOrEmpty()
+                isButtonEnabled = validateInput(
+                    firstname,
+                    lastname,
+                    birthday,
+                    email,
+                    password,
+                    password_confirm,
+                    careername,
+                    gender
+                )
             },
-            label = { Text("Password") },
+            label = { Text("รหัสผ่าน") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done,
                 keyboardType = KeyboardType.Password
@@ -165,12 +237,21 @@ fun RegisterScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
-            value = password,
+            value = password_confirm,
             onValueChange = {
-                password = it
-                isButtonEnabled = !studentID.isNullOrBlank() && !password.isNullOrEmpty()
+                password_confirm = it
+                isButtonEnabled = validateInput(
+                    firstname,
+                    lastname,
+                    birthday,
+                    email,
+                    password,
+                    password_confirm,
+                    careername,
+                    gender
+                )
             },
-            label = { Text("Confirm Password") },
+            label = { Text("ยืนยันรหัสผ่าน") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done,
                 keyboardType = KeyboardType.Password
@@ -183,46 +264,30 @@ fun RegisterScreen(navController: NavHostController) {
         )
         Spacer(modifier = Modifier.height(16.dp))
 
-//        OutlinedTextField(
-//            value = name,
-//            onValueChange = {
-//                name = it
-//                isButtonEnabled = !studentID.isNullOrBlank() && !password.isNullOrEmpty() && !name.isNullOrEmpty()
-//            },
-//            label = { Text("Birthday") },
-//            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
-//            leadingIcon = {
-//                Icon(imageVector = Icons.Default.DateRange, contentDescription = null)
-//            },
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//        Spacer(modifier = Modifier.height(16.dp))
-
-        date = DateContent()
+        birthday = DateContent()
 
         gender = genderRadioGroupUsage()
         Spacer(modifier = Modifier.height(16.dp))
 
-        OutlinedTextField(
-            value = name,
-            onValueChange = {
-                name = it
-                isButtonEnabled = !studentID.isNullOrBlank() && !password.isNullOrEmpty() && !name.isNullOrEmpty()
-            },
-            label = { Text("Career") },
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
-            leadingIcon = {
-                Icon(imageVector = Icons.Default.AccountCircle, contentDescription = null)
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
+        careername = CareerDropdown()
+        Spacer(modifier = Modifier.height(16.dp))
 
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
                 keyboardController?.hide()
                 focusManager.clearFocus()
-                Client.registerStudent(studentID, name, password, gender)
+                idcareer = id_careers[careername]!!
+                idgender = id_genders[gender]!!
+                Client.registerUser(
+                    firstname,
+                    lastname,
+                    birthday,
+                    email,
+                    password,
+                    idcareer,
+                    idgender
+                )
                     .enqueue(object : Callback<LoginClass> {
 
                         @SuppressLint("RestrictedApi")
@@ -264,18 +329,33 @@ fun RegisterScreen(navController: NavHostController) {
                 .fillMaxWidth()
                 .height(50.dp)
         ) {
-            Text("Register")
+            Text("ลงทะเบียน")
         }
-
-
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(5.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            TextButton(
+                onClick = {
+                    keyboardController?.hide()
+                    focusManager.clearFocus()
+                    if (navController.currentBackStack.value.size >= 2) {
+                        navController.popBackStack()
+                    }
+                    navController.navigate(Screen.Login.route)
+                }
+            ) {
+                Text("มีบัญชีแล้ว?")
+            }
+        }
     }
-
-
 }
 
-fun validateInput(std_id: String, pass: String): Boolean {
-    return !std_id.isNullOrBlank() && !pass.isNullOrEmpty()
-}
+
 
 @Composable
 fun radioGroup(
@@ -285,7 +365,7 @@ fun radioGroup(
 ) {
     Row(
     ) {
-        mItems.forEach {item ->
+        mItems.forEach { item ->
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -297,7 +377,8 @@ fun radioGroup(
                     enabled = true,
                     colors = RadioButtonDefaults.colors(
                         selectedColor = Color.Magenta
-                    ))
+                    )
+                )
                 Text(
                     text = item,
                     modifier = Modifier.padding(end = 1.dp)
@@ -309,15 +390,15 @@ fun radioGroup(
 
 @Composable
 fun genderRadioGroupUsage(): String {
-    val kinds = listOf("Male", "Female", "Other")
+    val kinds = listOf("ชาย", "หญิง", "อื่นๆ")
     val (selected, setSelected) = remember {
-        mutableStateOf("")
+        mutableStateOf(kinds[0])
     }
-    Column (
+    Column(
         horizontalAlignment = Alignment.Start,
     ) {
         Text(
-            text = "Gender : $selected",
+            text = "เพศ : $selected",
             textAlign = TextAlign.Start,
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp,
@@ -335,7 +416,7 @@ fun genderRadioGroupUsage(): String {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DateContent(): Long {
+fun DateContent(): String {
     var calendar = Calendar.getInstance()
     var mYear = calendar.get(Calendar.YEAR)
     var mMonth = calendar.get(Calendar.MONTH)
@@ -351,7 +432,7 @@ fun DateContent(): Long {
         mutableLongStateOf(calendar.timeInMillis)
     }
 
-    if(showDatePicker) {
+    if (showDatePicker) {
         DatePickerDialog(
             onDismissRequest = {
                 showDatePicker = false
@@ -361,14 +442,14 @@ fun DateContent(): Long {
                     showDatePicker = false
                     selectedDate = datePickerState.selectedDateMillis!!
                 }) {
-                    Text(text = "Confirm")
+                    Text(text = "ยืนยัน")
                 }
             },
             dismissButton = {
                 TextButton(onClick = {
                     showDatePicker = false
                 }) {
-                    Text(text = "Cancel")
+                    Text(text = "ยกเลิก")
                 }
             }
         ) {
@@ -385,7 +466,7 @@ fun DateContent(): Long {
     ) {
         Text(
             modifier = Modifier.padding(5.dp),
-            text = "Birthday"
+            text = "วันเกิด"
         )
         FilledIconButton(
             onClick = { showDatePicker = true }) {
@@ -396,8 +477,93 @@ fun DateContent(): Long {
             )
         }
         var formatter = SimpleDateFormat("dd-MMM-yyy")
-        Text(text = "Date: ${formatter.format(Date(selectedDate))}")
+        Text(text = "วันที่ ${formatter.format(Date(selectedDate))}")
     }
-    return selectedDate
+    return SimpleDateFormat("yyyy-MM-dd").format(Date(selectedDate))
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CareerDropdown(): String {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val CareerList = listOf(
+        "นักเรียน/นักศึกษา",
+        "ธุรกิจส่วนตัว",
+        "ข้าราชการ/พนักงานราชการ",
+        "รับจ้าง"
+    )
+    var expanded by remember {
+        mutableStateOf(false)
+    }
+    var selectedCareer by remember {
+        mutableStateOf(CareerList[0])
+    }
+
+    ExposedDropdownMenuBox(
+        modifier = Modifier
+            .clickable { keyboardController?.hide() },
+        expanded = expanded,
+        onExpandedChange = {
+            expanded = !expanded
+        }) {
+        OutlinedTextField(
+            modifier = Modifier
+                .width(400.dp)
+                .menuAnchor()
+                .clickable { keyboardController?.hide() },
+            value = selectedCareer,
+            onValueChange = {},
+            textStyle = TextStyle.Default.copy(fontSize = 12.sp),
+            readOnly = true,
+            label = { Text("อาชีพ") },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            colors = ExposedDropdownMenuDefaults.textFieldColors()
+        )
+
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = {
+                expanded = false
+            }
+        ) {
+            CareerList.forEach { selectionOption ->
+                DropdownMenuItem(
+                    text = { Text(selectionOption) },
+                    onClick = {
+                        selectedCareer = selectionOption
+                        expanded = false
+                    },
+                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                )
+            }
+        }
+    }
+    return selectedCareer
+}
+
+fun validateInput(
+    firstname: String,
+    lastname: String,
+    birthday: String,
+    email: String,
+    password: String,
+    password_confirm: String,
+    career: String,
+    gender: String
+): Boolean {
+    if (!(firstname.isNullOrBlank() ||
+                lastname.isNullOrBlank() ||
+                birthday.isNullOrBlank() ||
+                email.isNullOrBlank() ||
+                password.isNullOrBlank() ||
+                password_confirm.isNullOrBlank() ||
+                career.isNullOrBlank() ||
+                gender.isNullOrBlank()) &&
+        (password == password_confirm) &&
+        (gender != "เลือกอาชีพ")
+    ) {
+        return true;
+    } else {
+        return false;
+    }
+}

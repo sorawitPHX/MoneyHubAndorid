@@ -1,7 +1,6 @@
 package com.example.moneyhubandorid
 
 import android.content.Context
-import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -41,7 +40,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.moneyhubandorid.ui.theme.MoneyHubAndoridTheme
-import com.example.project_1.FinanceScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,9 +52,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 //                    Greeting("Android")
-                    FinanceScreen()
-//                    MyScreen()
-
+//                    FinanceScreen()
+                    MyScreen()
                 }
             }
         }
