@@ -36,12 +36,13 @@ app.post('/user', function(req, res) {
     });
 });
 
-app.post('/login', async function(req, res) {
+app.get('/login', async function(req, res) {
+
     let email = req.body.email;
     let password = req.body.password;
 
     if(!email || !password) {
-        return res.status(400).send({ "success": 0, "message" : 'Please provide student id and password.' });
+        return res.status(400).send({ error: user, message: 'Please provide student id and password.' });
     }
 
     dbConn.query('SELECT * FROM users WHERE email = ?', [email], function(error, results, fields) {
@@ -50,7 +51,7 @@ app.post('/login', async function(req, res) {
             bcrypt.compare(password, results[0].password, function(error, result) {
                 if(error) throw error;
                 if(result) {
-                    return res.send({"success": 1, "email": results[0].email, "firstname": results[0].firstname,
+                    return res.send({"success": 1, "iduser": result[0].iduser, "email": results[0].email, "firstname": results[0].firstname,
                                      "lastname": results[0].lastname, "birthday": results[0].birthday, "profile_photo_path": results[0].profile_photo_path,
                                     "idcareer": results[0].idcareer, "idgender": results[0].idgender});
                 } else {
@@ -64,6 +65,7 @@ app.post('/login', async function(req, res) {
 });
 
 app.post('/insertAccount', async function(req, res) {
+
     let post = req.body;
     let firstname = post.firstname;
     let lastname = post.lastname;
@@ -84,12 +86,21 @@ app.post('/insertAccount', async function(req, res) {
         if(results[0]) {
             return res.status(400).send({ error: true, message: 'This email is already in database.' });
         } else {
-            var insertData = "INSERT INTO users(firstname, lastname, birthday, email, password, idcareer, idgender) VALUES('"
+            var insertUser = "INSERT INTO users(firstname, lastname, birthday, email, password, idcareer, idgender) VALUES('"
                                + firstname + "','" + lastname + "','" + birthday + "','" + email + "','" + password_hash + "','" + idcareer
                                + "','" + idgender + "')"
 
-            dbConn.query(insertData, (error, results) => {
+            dbConn.query(insertUser, (error, results) => {
                 if(error) throw error;
+
+                var insertBookofAccount = "INSERT INTO account_books(iduser, account_book, balance) VALUES('"
+                                        + results.insertId + "','" + "สมุดบันทึกเริ่มต้น" + "','" + 0 + "')"
+
+                dbConn.query(insertBookofAccount, (error, results) => {
+                    if(error) throw error;
+                    return res.send(results);
+                });
+
                 return res.send(results);
             });
         }
