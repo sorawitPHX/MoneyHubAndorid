@@ -54,7 +54,6 @@ class MainActivity : ComponentActivity() {
 //                    Greeting("Android")
 //                    FinanceScreen()
                     MyScreen()
-
                 }
             }
         }

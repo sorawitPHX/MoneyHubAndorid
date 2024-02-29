@@ -10,10 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavHostController
 import com.example.moneyhubandorid.Screen
 
 @Composable
-fun AnalysisScreen() {
+fun AnalysisScreen(navController: NavHostController) {
     val contextForToast = LocalContext.current
     Column (
         modifier = Modifier.fillMaxSize(),

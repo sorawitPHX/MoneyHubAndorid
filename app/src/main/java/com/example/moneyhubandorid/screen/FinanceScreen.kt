@@ -40,13 +40,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 //import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.moneyhubandorid.R
 import com.example.moneyhubandorid.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FinanceScreen() {
+fun FinanceScreen(navController: NavHostController) {
     val contextForToast = LocalContext.current
     var expanded by remember { mutableStateOf(false) }
     val navigationItems = listOf(

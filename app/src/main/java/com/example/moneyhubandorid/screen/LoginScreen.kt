@@ -84,7 +84,7 @@ fun LoginScreen(navController: NavHostController) {
             Lifecycle.State.STARTED -> {}
             Lifecycle.State.RESUMED -> {
                 if (sharePreferences.isLoggedIn) {
-                    navController.navigate(Screen.Profile.route)
+                    navController.navigate(Screen.Home.route)
                 }
                 if (!sharePreferences.userEmail.isNullOrEmpty()) {
                     userEmail = sharePreferences.userEmail ?: ""
@@ -167,7 +167,7 @@ fun LoginScreen(navController: NavHostController) {
                                     if (navController.currentBackStack.value.size >= 2) {
                                         navController.popBackStack()
                                     }
-                                    navController.navigate(Screen.Profile.route)
+                                    navController.navigate(Screen.Home.route)
                                 } else {
                                     Toast.makeText(
                                         contextForToast,
