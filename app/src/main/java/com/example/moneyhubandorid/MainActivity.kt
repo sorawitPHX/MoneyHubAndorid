@@ -28,6 +28,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,7 +38,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.moneyhubandorid.ui.theme.MoneyHubAndoridTheme
@@ -53,7 +57,8 @@ class MainActivity : ComponentActivity() {
                 ) {
 //                    Greeting("Android")
 //                    FinanceScreen()
-                    MyScreen()
+//                    MyScreen()
+                    MyScaffoldLayout()
                 }
             }
         }
@@ -79,15 +84,17 @@ fun GreetingPreview() {
 @Composable
 fun MyScreen() {
     val navController = rememberNavController()
-    Column (
+    Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
+    ) {
     }
     NavGraph(navController = navController)
 }
+
 @Composable
-fun MyBottomBar(navController: NavController, contextForToast: Context){
+fun MyBottomBar(navController: NavController, contextForToast: Context) {
+
     val navigationItems = listOf(
         Screen.Home,
         Screen.Finance,
@@ -97,6 +104,8 @@ fun MyBottomBar(navController: NavController, contextForToast: Context){
     var selectedScreen by remember {
         mutableStateOf(0) // or use mutableStateOf(0)
     }
+
+
     NavigationBar {
         navigationItems.forEachIndexed { index, screen ->
             NavigationBarItem(
@@ -114,21 +123,27 @@ fun MyBottomBar(navController: NavController, contextForToast: Context){
             )
         }
     }
+
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyTopAppBar(contextForToast: Context){
+fun MyTopAppBar(contextForToast: Context) {
     var expanded by remember { mutableStateOf(false) }
     CenterAlignedTopAppBar(
         title = {
-            Text(text = "My Application") },
+            Text(text = "My Application")
+        },
         actions = {
             // Notificotions icon
             IconButton(onClick = {
-                Toast.makeText(contextForToast,"Notifications",Toast.LENGTH_SHORT)
+                Toast.makeText(contextForToast, "Notifications", Toast.LENGTH_SHORT)
                     .show()
             }) {
-                Icon(imageVector = Icons.Outlined.NotificationsNone, contentDescription = "Notifications")
+                Icon(
+                    imageVector = Icons.Outlined.NotificationsNone,
+                    contentDescription = "Notifications"
+                )
             }
             //vertical 3 dots icon
             IconButton(onClick = { expanded = true }
@@ -142,9 +157,9 @@ fun MyTopAppBar(contextForToast: Context){
             ) {
                 //menu items
                 DropdownMenuItem(
-                    text = { Text("Settings")},
+                    text = { Text("Settings") },
                     onClick = {
-                        Toast.makeText(contextForToast,"Settings", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(contextForToast, "Settings", Toast.LENGTH_SHORT).show()
                         expanded = false
                     },
                     leadingIcon = {
@@ -155,9 +170,9 @@ fun MyTopAppBar(contextForToast: Context){
                     }
                 )
                 DropdownMenuItem(
-                    text = { Text("Logout")},
+                    text = { Text("Logout") },
                     onClick = {
-                        Toast.makeText(contextForToast,"Logout", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(contextForToast, "Logout", Toast.LENGTH_SHORT).show()
                         expanded = false
                     },
                     leadingIcon = {
@@ -175,24 +190,41 @@ fun MyTopAppBar(contextForToast: Context){
         )
     )//end TopAppBar
 }
+
 @Composable
 fun MyScaffoldLayout() {
     val contextForToast = LocalContext.current.applicationContext
     val navController = rememberNavController()
-    Scaffold (
-        topBar = { MyTopAppBar(contextForToast = contextForToast) },
-        bottomBar = { MyBottomBar(navController  ,contextForToast ) },
-        floatingActionButtonPosition = FabPosition.End,
-    ){paddingValues ->
-        Column (
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues = paddingValues),
-            //verticlArangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ){
-            Text(text = "Screen area")
+    lateinit var sharePreferences: SharePreferencesManager
+    sharePreferences = SharePreferencesManager(context = contextForToast)
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val lifecycleState by lifecycleOwner.lifecycle.currentStateFlow.collectAsState()
+    LaunchedEffect(lifecycleState) {
+        when (lifecycleState) {
+            Lifecycle.State.DESTROYED -> {}
+            Lifecycle.State.INITIALIZED -> {}
+            Lifecycle.State.CREATED -> {}
+            Lifecycle.State.STARTED -> {}
+            Lifecycle.State.RESUMED -> {
+                println(sharePreferences.isLoggedIn)
+            }
         }
-        NavGraph(navController = navController)
     }
+        Scaffold(
+            bottomBar = {
+                MyBottomBar(navController, contextForToast)
+            },
+            floatingActionButtonPosition = FabPosition.End,
+        ) { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues = paddingValues),
+                //verticlArangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+//                Text(text = sharePreferences.isLoggedIn.toString())
+                NavGraph(navController = navController)
+            }
+        }
 }

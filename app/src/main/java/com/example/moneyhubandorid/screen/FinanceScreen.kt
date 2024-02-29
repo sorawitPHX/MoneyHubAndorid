@@ -28,32 +28,25 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 //import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.moneyhubandorid.R
 import com.example.moneyhubandorid.Screen
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-
 fun FinanceScreen(navController: NavHostController) {
     val contextForToast = LocalContext.current
     var expanded by remember { mutableStateOf(false) }
@@ -66,186 +59,138 @@ fun FinanceScreen(navController: NavHostController) {
     var selectedScreen by remember {
         mutableStateOf(0) // or use mutableStateOf(0)
     }
-    val focusManager = LocalFocusManager.current
-    val coroutineScope = rememberCoroutineScope()
-    val keyboardController = LocalSoftwareKeyboardController.current
 
-//    LaunchedEffect(Unit) {
-//        ExpenseIconButtonRow()
-//        IncomeIconButtonRow()
-//    }
-
-    Column(
+    Column (
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        // verticalArrangement = Arrangement.Center
-    ) {
+//        verticalArrangement = Arrangement.Center
+    ){
         CenterAlignedTopAppBar(
-
             title = {
-                /* ตัวอย่างเช่น */
-            },
-            actions = {
-                // Notifications icon
-                IconButton(
-                    onClick = {
-                        keyboardController?.hide()
-                        focusManager.clearFocus()
-                        if (navController.currentBackStack.value.size >= 2) {
-                            navController.popBackStack()
-                        }
-                        navController.navigate(Screen.Login.route)
-                    },
-                    modifier = Modifier.size(48.dp) // กำหนดขนาดของปุ่ม
-                ) {
-                    Icon(Icons.Default.Cancel, contentDescription = "ค่าใช้จ่าย")
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                // ปุ่ม "ค่าใช้จ่าย"
-                Button(
-                    onClick = {
-                        coroutineScope.launch {
 
-                        }
+                 },
+            actions = {
+                // Notificotions icon
+                    IconButton(
+                        onClick = {
+                            Toast.makeText(contextForToast, "ยกเลิกการแก้ไข", Toast.LENGTH_SHORT)
+                                .show()
+                        },
+                        modifier = Modifier.size(48.dp) // กำหนดขนาดของปุ่ม
+                    ) {
+                        Icon(Icons.Default.Cancel, contentDescription = "ค่าใช้จ่าย")
                     }
-                ) {
-                    Text("ค่าใช้จ่าย")
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                // ปุ่ม "รายได้"
-                Button(
-                    onClick = {
-                        /*TODO: ดำเนินการเมื่อคลิกปุ่มรายได้*/
+                    Button(onClick = {
+                        Toast.makeText(contextForToast,"ค่าใช้จ่าย", Toast.LENGTH_SHORT)
+                            .show()
+                    }) {
+                        Text("ค่าใช้จ่าย")
                     }
-                ) {
-                    Text("รายได้")
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                IconButton(
-                    onClick = {
-                        /* ตัวอย่างเช่น */
-                    },
-                    modifier = Modifier.size(48.dp)
-                ) {
-                    Icon(Icons.Default.Check, contentDescription = "รายได้")
-                }
-            },
+                    Spacer(modifier = Modifier.width(8.dp)) // ตัวเว้นวรรค
+                    Button(onClick = {
+                        Toast.makeText(contextForToast,"รายได้", Toast.LENGTH_SHORT)
+                            .show()
+                    }) {
+                        Text("รายได้")
+                    }
+                    IconButton(
+                        onClick = {
+                            Toast.makeText(contextForToast, "บันทึกข้อมูล", Toast.LENGTH_SHORT)
+                                .show()
+                        },
+                        modifier = Modifier.size(48.dp) // กำหนดขนาดของปุ่ม
+                    ) {
+                        Icon(Icons.Default.Check, contentDescription = "รายได้")
+                    }
+
+
+            },//end action
             colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                 containerColor = Color.Blue.copy(alpha = 0.3f)
             )
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        ExpenseIconButtonRow()  //ของปุ่มรายจ่าย
-        Spacer(modifier = Modifier.height(16.dp))
-        IncomeIconButtonRow() //ของปุ่มรายได้
+
+
+Box(
+    modifier = Modifier.fillMaxWidth()
+
+)
+        Row (
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier.padding(vertical = 16.dp)
+        ){
+
+
+            ExpenseIconButton(
+                iconRes = R.drawable.fast_food,
+                label = "อาหาร",
+                onClick = { /*TODO*/ }
+            )
+
+            ExpenseIconButton(
+                iconRes = R.drawable.calendar_6540110,
+                label = "รายวัน",
+                onClick = { /*TODO*/ }
+            )
+
+
+            ExpenseIconButton(
+                iconRes = R.drawable.bus_school,
+                label = "การจราจร",
+                onClick = { /*TODO*/ }
+            )
+
+            ExpenseIconButton(
+                iconRes = R.drawable.toast,
+                label = "ทางสังคม",
+                onClick = { /*TODO*/ }
+            )
+
+        }
+        Row (
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier.padding(vertical = 16.dp)
+        ){
+
+
+            ExpenseIconButton(
+                iconRes = R.drawable.house,
+                label = "ที่อยู่อาศัย",
+                onClick = { /*TODO*/ }
+            )
+
+            ExpenseIconButton(
+                iconRes = R.drawable.gift,
+                label = "ของขวัญ",
+                onClick = { /*TODO*/ }
+            )
+
+            ExpenseIconButton(
+                iconRes = R.drawable.chat,
+                label = "สื่อสาร",
+                onClick = { /*TODO*/ }
+            )
+
+            ExpenseIconButton(
+                iconRes = R.drawable.clothes_rack,
+                label = "เสื้อผ้า",
+                onClick = { /*TODO*/ }
+            )
+
+        }
+        Row {
+
+            ExpenseIconButton(
+                iconRes = R.drawable.settings,
+                label = "การตั้งค่า",
+                onClick = { /*TODO*/ }
+            )
+
+
+        }
     }
+
 }
-
-
-
-
-@Composable
-fun ExpenseIconButtonRow() {
-    Row(
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        ExpenseIconButton(
-            iconRes = R.drawable.fast_food,
-            label = "อาหาร",
-            onClick = { /*TODO*/ }
-        )
-        ExpenseIconButton(
-            iconRes = R.drawable.calendar_6540110,
-            label = "รายวัน",
-            onClick = { /*TODO*/ }
-        )
-        ExpenseIconButton(
-            iconRes = R.drawable.bus_school,
-            label = "การจราจร",
-            onClick = { /*TODO*/ }
-        )
-        ExpenseIconButton(
-            iconRes = R.drawable.toast,
-            label = "ทางสังคม",
-            onClick = { /*TODO*/ }
-        )
-    }
-    Row(
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        ExpenseIconButton(
-            iconRes = R.drawable.house,
-            label = "ที่อยู่อาศัย",
-            onClick = { /*TODO*/ }
-        )
-        ExpenseIconButton(
-            iconRes = R.drawable.gift,
-            label = "ของขวัญ",
-            onClick = { /*TODO*/ }
-        )
-        ExpenseIconButton(
-            iconRes = R.drawable.chat,
-            label = "สื่อสาร",
-            onClick = { /*TODO*/ }
-        )
-        ExpenseIconButton(
-            iconRes = R.drawable.clothes_rack,
-            label = "เสื้อผ้า",
-            onClick = { /*TODO*/ }
-        )
-    }
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        ExpenseIconButton2(
-            iconRes = R.drawable.settings,
-            label = "การตั้งค่า",
-            onClick = { /*TODO*/ }
-        )
-    }
-}
-@Composable
-fun IncomeIconButtonRow() {
-    Row(
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        ExpenseIconButton(
-            iconRes = R.drawable.wages ,
-            label = "ค่าจ้าง",
-            onClick = { /*TODO*/ },
-        )
-        ExpenseIconButton(
-            iconRes = R.drawable.earning,
-            label = "โบนัส",
-            onClick = { /*TODO*/ },
-        )
-        ExpenseIconButton(
-            iconRes = R.drawable.investing,
-            label = "การลงทุน",
-            onClick = { /*TODO*/ },
-        )
-        ExpenseIconButton(
-            iconRes = R.drawable.consultant,
-            label = "ไอที",
-            onClick = { /*TODO*/ }
-        )
-    }
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        ExpenseIconButton2(
-            iconRes = R.drawable.settings,
-            label = "การตั้งค่า",
-            onClick = { /*TODO*/ }
-        )
-    }
-}
-
 
 @Composable
 fun ExpenseIconButton(
@@ -256,9 +201,15 @@ fun ExpenseIconButton(
     IconButton(
         onClick = onClick,
         modifier = Modifier.size(100.dp)
+
     ) {
         Box(
             modifier = Modifier
+//                .border(
+//                    width = 1.dp,
+//                    color = Color.Gray.copy(alpha = 0.5f),
+//                    shape = RoundedCornerShape(10.dp)
+//                )
                 .padding(10.dp)
                 .size(120.dp)
                 .aspectRatio(1f),
@@ -267,43 +218,7 @@ fun ExpenseIconButton(
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Image(
-                    painter = painterResource(iconRes),
-                    contentDescription = null,
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier.size(40.dp)
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = label,
-                    fontSize = 15.sp,
-                    color = Color.Black,
-                )
-            }
-        }
-    }
-}
-@Composable
-fun ExpenseIconButton2(
-    iconRes: Int,
-    label: String,
-    onClick: () -> Unit
-) {
-    IconButton(
-        onClick = onClick,
-        modifier = Modifier.size(100.dp)
-    ) {
-        Box(
-            modifier = Modifier
-                .padding(10.dp)
-                .size(120.dp)
-                .aspectRatio(1f)
-//                .align(Alignment.Start) // ปรับให้ชิดซ้าย
-        ) {
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                // เพิ่ม horizontalAlignment เพื่อจัดให้เนื้อหาอยู่กึ่งกลางในแนวนอน
             ) {
                 Image(
                     painter = painterResource(iconRes),
@@ -322,8 +237,83 @@ fun ExpenseIconButton2(
     }
 }
 
+//    ConstraintLayout(
+//        modifier = Modifier.fillMaxSize()
+//    ) {
+//        val ( secondText, catImage) = createRefs()
+//
+//
+//
+//        Text(
+//            text = "We are cats!",
+//            style = TextStyle(Color.Black),
+//            fontSize = 30.sp,
+//            modifier = Modifier
+//                .padding(5.dp)
+//                .constrainAs(secondText) {
+//                    centerHorizontallyTo(parent)
+//                    top.linkTo(catImage.bottom)
+//                }
+//        )
+//
+//        Image(
+//            painter = painterResource(id = R.drawable.cartoon_cat),
+//            contentDescription = null,
+//            contentScale = ContentScale.Fit,
+//            modifier = Modifier
+//                .size(300.dp)
+//                .constrainAs(catImage) {
+//                    centerHorizontallyTo(parent)
+//                    top.linkTo(catImage.top)
+//                }
+//        )
+//
+//
+//    }
+//    ConstraintLayout(
+//        modifier = Modifier.fillMaxSize()
+//    ) {
+//        val (secondText, catImage) = createRefs()
+//
+//        Text(
+//            text = "We are cats!",
+//            style = TextStyle(Color.Black),
+//            fontSize = 30.sp,
+//            modifier = Modifier
+//                .padding(5.dp)
+//                .constrainAs(secondText) {
+//                    centerHorizontallyTo(parent)
+//                    top.linkTo(catImage.bottom)
+//                }
+//        )
 
-
+//        ImageButton(
+//            onClick = {
+//                Toast.makeText(contextForToast, "คุณกำลังคลิกที่รูปภาพ", Toast.LENGTH_SHORT).show()
+//            },
+//            content = {
+//                Image(
+//                    painter = painterResource(id = R.drawable.cartoon_cat),
+//                    contentDescription = null,
+//                    contentScale = ContentScale.Fit,
+//                    modifier = Modifier
+//                        .size(300.dp)
+//                )
+//                Text(
+//                    text = "กดที่รูปภาพ",
+//                    color = Color.White,
+//                    modifier = Modifier
+//                        .align(Alignment.BottomCenter)
+//                        .padding(8.dp)
+//                )
+//            },
+//            modifier = Modifier
+//                .size(300.dp)
+//                .constrainAs(catImage) {
+//                    centerHorizontallyTo(parent)
+//                    top.linkTo(parent.top)
+//                }
+//        )
 
 
 

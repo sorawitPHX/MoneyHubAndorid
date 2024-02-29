@@ -83,6 +83,7 @@ fun LoginScreen(navController: NavHostController) {
             Lifecycle.State.CREATED -> {}
             Lifecycle.State.STARTED -> {}
             Lifecycle.State.RESUMED -> {
+
                 if (sharePreferences.isLoggedIn) {
                     navController.navigate(Screen.Home.route)
                 }
@@ -223,6 +224,7 @@ fun LoginScreen(navController: NavHostController) {
             ) {
                 Text("ลงทะเบียน")
             }
+//            Text(text = "${sharePreferences.isLoggedIn}")
         }
     }
 }

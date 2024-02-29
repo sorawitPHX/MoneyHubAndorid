@@ -26,6 +26,7 @@ class SharePreferencesManager(context: Context) {
 
     fun clearUserLogin() {
         preferences.edit { remove(KEY_IS_LOGGED_IN) }
+        preferences.edit { remove(KEY_USER_ID) }
     }
 
     companion object {
