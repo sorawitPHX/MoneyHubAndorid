@@ -22,11 +22,13 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
@@ -86,7 +88,7 @@ fun FinanceTopAppBar(navController: NavHostController, contextForToast: Context)
             }
             Spacer(modifier = Modifier.weight(1f))
             // ปุ่ม "ค่าใช้จ่าย"
-            Button(
+            ElevatedButton(
                 onClick = {
                     coroutineScope.launch {
                     }
@@ -96,11 +98,11 @@ fun FinanceTopAppBar(navController: NavHostController, contextForToast: Context)
                     navController.navigate(Screen.Expense.route)
                 }
             ) {
-                Text("ค่าใช้จ่าย")
+                Text("ค่าใช้จ่าย",color = Color.Black)
             }
             Spacer(modifier = Modifier.width(8.dp))
             // ปุ่ม "รายได้"
-            Button(
+            ElevatedButton(
                 onClick = {
                     if (navController.currentBackStack.value.size >= 2) {
                         navController.popBackStack()
@@ -108,7 +110,7 @@ fun FinanceTopAppBar(navController: NavHostController, contextForToast: Context)
                     navController.navigate(Screen.Income.route)
                 }
             ) {
-                Text("รายได้")
+                Text("รายได้",color = Color.Black)
             }
             Spacer(modifier = Modifier.weight(1f))
             IconButton(
