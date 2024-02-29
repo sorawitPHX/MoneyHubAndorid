@@ -48,7 +48,7 @@ import com.example.moneyhubandorid.SharePreferencesManager
 @Composable
 fun HomeScreen(navController: NavHostController) {
     val contextForToast = LocalContext.current.applicationContext
-    val navController = rememberNavController()
+//    val navController = rememberNavController()
     Scaffold(
         topBar = {MyTopAppBar(navController,contextForToast = contextForToast)},
         bottomBar = { MyBottomBar(navController, contextForToast) },
