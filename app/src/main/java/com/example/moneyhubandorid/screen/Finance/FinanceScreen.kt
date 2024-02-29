@@ -68,10 +68,9 @@ fun FinanceScreen(navController: NavHostController) {
         mutableStateOf(0) // or use mutableStateOf(0)
     }
 
-
     Scaffold(
         topBar = {
-            FinanceTopAppBar(navController, contextForToast)
+//            FinanceTopAppBar(navController, contextForToast)
         },
         bottomBar = {
             BottomBar(navController, contextForToast)
@@ -89,7 +88,8 @@ fun FinanceScreen(navController: NavHostController) {
 
             Spacer(modifier = Modifier.height(16.dp))
              //ของปุ่มรายจ่าย
-            Text(text = "หน้าสรุปการเงิน")
+//            Text(text = "หน้าสรุปการเงิน")
+            Summary(navController)
         }
     }
 }

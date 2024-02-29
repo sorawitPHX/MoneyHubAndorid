@@ -78,7 +78,7 @@ fun FinanceTopAppBar(navController: NavHostController, contextForToast: Context)
                     if (navController.currentBackStack.value.size >= 2) {
                         navController.popBackStack()
                     }
-                    navController.navigate(Screen.Home.route)
+                    navController.navigate(Screen.Finance.route)
                 },
                 modifier = Modifier.size(48.dp) // กำหนดขนาดของปุ่ม
             ) {

@@ -66,7 +66,6 @@ fun HomeScreen(navController: NavHostController) {
             Lifecycle.State.STARTED -> {}
             Lifecycle.State.RESUMED -> {
                 if (!sharePreferences.isLoggedIn) {
-
                 }
             }
         }
@@ -91,7 +90,6 @@ fun HomeScreen(navController: NavHostController) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(text = "Home Screen area")
-                Text(text = "${sharePreferences.isLoggedIn}")
             }
         }
     }

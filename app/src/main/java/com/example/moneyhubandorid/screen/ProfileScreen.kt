@@ -7,12 +7,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -30,10 +33,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavHostController
+import com.example.moneyhubandorid.AppBar.BottomBar
 import com.example.moneyhubandorid.ProfileClass
 import com.example.moneyhubandorid.Screen
 import com.example.moneyhubandorid.SharePreferencesManager
 import com.example.moneyhubandorid.api.StudentAPI
+import com.example.moneyhubandorid.screen.Finance.Summary
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -50,7 +55,7 @@ fun ProfileScreen(navController: NavHostController) {
     var studentItems by remember {
         mutableStateOf(initialStudent)
     }
-    var loggotDialog by remember{mutableStateOf(false)}
+    var loggotDialog by remember { mutableStateOf(false) }
     var rememberVal by remember {
         mutableStateOf(false)
     }
@@ -95,98 +100,116 @@ fun ProfileScreen(navController: NavHostController) {
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Spacer(modifier = Modifier.height(30.dp))
-        Text(text = "Profile", fontSize = 25.sp)
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "Student ID: $userId\nName: ${studentItems.std_name}\n" +
-                    "Gender: ${studentItems.std_gender}\nRole: ${studentItems.role}",
-            fontSize = 18.sp
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        val isInvisible = studentItems.role == "admin"
-        Box(
-            content = {
-                if (isInvisible) {
-                    Button(
-                        onClick = {
-                            //Ass 10
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp)
-                    ) {
-                        Text("Show all students")
-                    }
-                }
-            }
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = {
-                //ทำ Dialog
-                loggotDialog = true
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
+    Scaffold(
+        topBar = {
+//            FinanceTopAppBar(navController, contextForToast)
+        },
+        bottomBar = {
+            BottomBar(navController, contextForToast)
+        },
+        floatingActionButtonPosition = FabPosition.End,
+    ) { paddingValues ->
+        Column(
+            modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(paddingValues = paddingValues),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            // verticalArrangement = Arrangement.Center
         ) {
-            Text(text = "Logout")
-
-            if(loggotDialog) {
-                AlertDialog(
-                    onDismissRequest = {
-                        loggotDialog = false
-                    },
-                    confirmButton = {
-                        TextButton(
-                            onClick = {
-                                loggotDialog = false
-                                if(rememberVal) {
-                                    sharePreferences.clearUserLogin()
-                                }else {
-                                    sharePreferences.clearUserAll()
-                                }
-                                if (navController.currentBackStack.value.size >= 2) {
-                                    navController.popBackStack()
-                                }
-                                navController.navigate(Screen.Login.route)
-                            }
-                        ){
-                            Text(text = "Yes")
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(onClick = {
-                            loggotDialog = false
-                        }) {
-                            Text(text = "No")
-                        }
-                    },
-                    title = {Text(text = "Logout")},
-                    text = {
-                        Column {
-                            Text(text = "Do you want to logout?")
-                            Row (
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
-                            ){
-                                Checkbox(checked = rememberVal, onCheckedChange = { rememberVal = it })
-                                Text(text = "Remember your student ID")
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(30.dp))
+                Text(text = "Profile", fontSize = 25.sp)
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Student ID: $userId\nName: ${studentItems.std_name}\n" +
+                            "Gender: ${studentItems.std_gender}\nRole: ${studentItems.role}",
+                    fontSize = 18.sp
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                val isInvisible = studentItems.role == "admin"
+                Box(
+                    content = {
+                        if (isInvisible) {
+                            Button(
+                                onClick = {
+                                    //Ass 10
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(50.dp)
+                            ) {
+                                Text("Show all students")
                             }
                         }
                     }
                 )
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(
+                    onClick = {
+                        //ทำ Dialog
+                        loggotDialog = true
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp)
+                ) {
+                    Text(text = "Logout")
+
+                    if (loggotDialog) {
+                        AlertDialog(
+                            onDismissRequest = {
+                                loggotDialog = false
+                            },
+                            confirmButton = {
+                                TextButton(
+                                    onClick = {
+                                        loggotDialog = false
+                                        if (rememberVal) {
+                                            sharePreferences.clearUserLogin()
+                                        } else {
+                                            sharePreferences.clearUserAll()
+                                        }
+                                        if (navController.currentBackStack.value.size >= 2) {
+                                            navController.popBackStack()
+                                        }
+                                        navController.navigate(Screen.Login.route)
+                                    }
+                                ) {
+                                    Text(text = "Yes")
+                                }
+                            },
+                            dismissButton = {
+                                TextButton(onClick = {
+                                    loggotDialog = false
+                                }) {
+                                    Text(text = "No")
+                                }
+                            },
+                            title = { Text(text = "Logout") },
+                            text = {
+                                Column {
+                                    Text(text = "Do you want to logout?")
+                                    Row(
+                                        horizontalArrangement = Arrangement.Center,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Checkbox(
+                                            checked = rememberVal,
+                                            onCheckedChange = { rememberVal = it })
+                                        Text(text = "Remember your student ID")
+                                    }
+                                }
+                            }
+                        )
+                    }
+                }
             }
         }
-
     }
-
-
 }
