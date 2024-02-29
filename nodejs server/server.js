@@ -36,7 +36,7 @@ app.post('/user', function(req, res) {
     });
 });
 
-app.get('/login', async function(req, res) {
+app.post('/login', async function(req, res) {
 
     let email = req.body.email;
     let password = req.body.password;
@@ -51,7 +51,7 @@ app.get('/login', async function(req, res) {
             bcrypt.compare(password, results[0].password, function(error, result) {
                 if(error) throw error;
                 if(result) {
-                    return res.send({"success": 1, "iduser": result[0].iduser, "email": results[0].email, "firstname": results[0].firstname,
+                    return res.send({"success": 1, "iduser": results[0].iduser, "email": results[0].email, "firstname": results[0].firstname,
                                      "lastname": results[0].lastname, "birthday": results[0].birthday, "profile_photo_path": results[0].profile_photo_path,
                                     "idcareer": results[0].idcareer, "idgender": results[0].idgender});
                 } else {
