@@ -36,6 +36,30 @@ app.post('/user', function(req, res) {
     });
 });
 
+app.get('/category', async function(req, res) {
+
+    let idtransaction_types = req.body.idtransaction_types;
+
+    dbConn.query('SELECT * FROM categories WHERE idtransaction_types = ?', idtransaction_types, function(error, results, fields) {
+        if(error) throw error;
+        return res.send(results);
+    });
+});
+
+app.get('/allCareers', function(req, res) {
+    dbConn.query('SELECT * FROM careers', function(error, results, fields) {
+        if(error) throw error;
+        return res.send(results);
+    });
+});
+
+app.get('/allGenders', function(req, res) {
+    dbConn.query('SELECT * FROM genders', function(error, results, fields) {
+        if(error) throw error;
+        return res.send(results);
+    });
+});
+
 app.post('/login', async function(req, res) {
 
     let email = req.body.email;
