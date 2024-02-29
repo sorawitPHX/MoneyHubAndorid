@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 29, 2024 at 06:16 PM
+-- Generation Time: Feb 29, 2024 at 06:24 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -32,7 +32,7 @@ CREATE TABLE `account_books` (
   `iduser` int(11) NOT NULL,
   `account_book` varchar(255) NOT NULL,
   `balance` decimal(10,2) NOT NULL,
-  `account_photo_path` varchar(2048) NOT NULL,
+  `account_photo_path` varchar(2048) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -72,7 +72,7 @@ CREATE TABLE `categories` (
   `idcategory` int(11) NOT NULL,
   `idtransaction_types` int(11) DEFAULT NULL,
   `category` varchar(255) NOT NULL,
-  `cate_photo_path` varchar(2048) NOT NULL,
+  `cate_photo_path` varchar(2048) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -173,7 +173,7 @@ CREATE TABLE `users_has_categories` (
   `iduser` int(11) NOT NULL,
   `idcategory` int(11) NOT NULL,
   `custom_name` varchar(255) NOT NULL,
-  `custom_photo_path` varchar(2048) NOT NULL,
+  `custom_photo_path` varchar(2048) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deleted_at` timestamp NULL DEFAULT NULL
