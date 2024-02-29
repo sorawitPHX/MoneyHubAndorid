@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 29, 2024 at 07:52 AM
+-- Generation Time: Feb 29, 2024 at 06:16 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -35,7 +35,7 @@ CREATE TABLE `account_books` (
   `account_photo_path` varchar(2048) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `deleted_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -49,7 +49,7 @@ CREATE TABLE `careers` (
   `career` varchar(150) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `deleted_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -57,8 +57,8 @@ CREATE TABLE `careers` (
 --
 
 INSERT INTO `careers` (`idcareer`, `career`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'นักเรียน/นักศึกษา', '2024-02-27 20:12:27', '2024-02-28 23:01:24', '2024-02-28 23:01:24'),
-(2, 'ธุรกิจส่วนตัว', '2024-02-27 20:12:27', '2024-02-28 23:01:36', '2024-02-28 23:01:36'),
+(1, 'นักเรียน/นักศึกษา', '2024-02-27 20:12:27', '2024-02-29 17:10:52', NULL),
+(2, 'ธุรกิจส่วนตัว', '2024-02-27 20:12:27', '2024-02-29 17:11:01', NULL),
 (3, 'ข้าราชการ/พนักงานราชการ', '2024-02-28 23:02:09', '2024-02-28 23:02:09', NULL),
 (4, 'รับจ้าง', '2024-02-28 23:02:09', '2024-02-28 23:02:09', NULL);
 
@@ -75,7 +75,7 @@ CREATE TABLE `categories` (
   `cate_photo_path` varchar(2048) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `deleted_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -89,7 +89,7 @@ CREATE TABLE `genders` (
   `gender` varchar(45) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `deleted_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -97,9 +97,9 @@ CREATE TABLE `genders` (
 --
 
 INSERT INTO `genders` (`idgender`, `gender`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'ชาย', '2024-02-27 20:10:32', '2024-02-28 23:21:51', '2024-02-28 23:21:51'),
-(2, 'หญิง', '2024-02-27 20:10:32', '2024-02-28 23:21:55', '2024-02-28 23:21:55'),
-(3, 'อื่นๆ', '2024-02-28 22:46:29', '2024-02-28 23:22:00', '2024-02-28 23:22:00');
+(1, 'ชาย', '2024-02-27 20:10:32', '2024-02-29 17:11:57', NULL),
+(2, 'หญิง', '2024-02-27 20:10:32', '2024-02-29 17:11:57', NULL),
+(3, 'อื่นๆ', '2024-02-28 22:46:29', '2024-02-29 17:11:57', NULL);
 
 -- --------------------------------------------------------
 
@@ -115,7 +115,7 @@ CREATE TABLE `transactions` (
   `description` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `deleted_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -129,7 +129,7 @@ CREATE TABLE `transactions_types` (
   `type` varchar(45) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `deleted_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -148,7 +148,7 @@ CREATE TABLE `users` (
   `profile_photo_path` varchar(2048) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `deleted_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `deleted_at` timestamp NULL DEFAULT NULL,
   `idcareer` int(11) NOT NULL,
   `idgender` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -176,7 +176,7 @@ CREATE TABLE `users_has_categories` (
   `custom_photo_path` varchar(2048) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `deleted_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
