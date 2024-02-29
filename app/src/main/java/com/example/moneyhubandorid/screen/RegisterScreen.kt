@@ -16,11 +16,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material3.Button
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DropdownMenuItem
@@ -29,6 +32,7 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
@@ -133,6 +137,34 @@ fun RegisterScreen(navController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+//        CenterAlignedTopAppBar(
+//            title = {
+//                Text(text = "ลงทะเบียน", fontSize = 25.sp)
+//            },
+//            actions = {
+//                Row(modifier = Modifier.padding(start = 16.dp)) { // กำหนดการเริ่มต้นของ Row พร้อม Padding ด้านซ้าย
+//                    IconButton(
+//                        onClick = {
+//                            /* ตัวอย่างเช่น */
+//                        },
+//                        modifier = Modifier
+//                            .size(48.dp) // กำหนดขนาดของปุ่ม
+//                            .align(Alignment.Start)
+//                    ) {
+//                        Icon(Icons.Default.ArrowBackIosNew, contentDescription = "กลับไปหน้าล็อคอิน")
+//                    }
+//                    // ห่างไกลจากปุ่มไปเล็กน้อย
+//                    Spacer(modifier = Modifier.width(8.dp))
+//                    // แสดง Text หลังจาก IconButton
+//                    Text(
+//                        text = "ลงทะเบียน",
+//                        fontSize = 18.sp,
+//                        modifier = Modifier.align(Alignment.CenterVertically) // จัดวาง Text ให้อยู่กลางตามแนวดิ่ง
+//                    )
+//                }
+//            }
+//        )
+
         Text(text = "ลงทะเบียน", fontSize = 25.sp)
         Spacer(modifier = Modifier.height(16.dp))
 

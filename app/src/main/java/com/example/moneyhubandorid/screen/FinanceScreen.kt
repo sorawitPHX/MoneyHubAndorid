@@ -39,7 +39,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -50,6 +53,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+
 fun FinanceScreen(navController: NavHostController) {
     val contextForToast = LocalContext.current
     var expanded by remember { mutableStateOf(false) }
@@ -62,7 +66,9 @@ fun FinanceScreen(navController: NavHostController) {
     var selectedScreen by remember {
         mutableStateOf(0) // or use mutableStateOf(0)
     }
+    val focusManager = LocalFocusManager.current
     val coroutineScope = rememberCoroutineScope()
+    val keyboardController = LocalSoftwareKeyboardController.current
 
 //    LaunchedEffect(Unit) {
 //        ExpenseIconButtonRow()
@@ -83,7 +89,12 @@ fun FinanceScreen(navController: NavHostController) {
                 // Notifications icon
                 IconButton(
                     onClick = {
-                        /* ตัวอย่างเช่น */
+                        keyboardController?.hide()
+                        focusManager.clearFocus()
+                        if (navController.currentBackStack.value.size >= 2) {
+                            navController.popBackStack()
+                        }
+                        navController.navigate(Screen.Login.route)
                     },
                     modifier = Modifier.size(48.dp) // กำหนดขนาดของปุ่ม
                 ) {
@@ -310,6 +321,7 @@ fun ExpenseIconButton2(
         }
     }
 }
+
 
 
 
