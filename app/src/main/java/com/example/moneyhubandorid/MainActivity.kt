@@ -210,21 +210,5 @@ fun MyScaffoldLayout() {
             }
         }
     }
-        Scaffold(
-            bottomBar = {
-                MyBottomBar(navController, contextForToast)
-            },
-            floatingActionButtonPosition = FabPosition.End,
-        ) { paddingValues ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues = paddingValues),
-                //verticlArangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-//                Text(text = sharePreferences.isLoggedIn.toString())
-                NavGraph(navController = navController)
-            }
-        }
+    NavGraph(navController = navController)
 }

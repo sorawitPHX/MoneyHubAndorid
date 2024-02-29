@@ -64,18 +64,39 @@ fun HomeScreen(navController: NavHostController) {
             Lifecycle.State.CREATED -> {}
             Lifecycle.State.STARTED -> {}
             Lifecycle.State.RESUMED -> {
+                if (sharePreferences.isLoggedIn) {
 
+                }
             }
         }
     }
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "Home Screen area")
-        Text(text = "${sharePreferences.isLoggedIn}")
+    Scaffold(
+        bottomBar = {
+            MyBottomBar(navController, contextForToast)
+        },
+        floatingActionButtonPosition = FabPosition.End,
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues = paddingValues),
+            //verticlArangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = "Home Screen area")
+                Text(text = "${sharePreferences.isLoggedIn}")
+            }
+//                NavGraph(navController = navController)
+//            Text(text = sharePreferences.isLoggedIn.toString())
+        }
     }
+
 }
 
 @Composable
