@@ -1,9 +1,11 @@
 package com.example.moneyhubandorid.screen.Finance
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -12,19 +14,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircleOutline
+import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Cancel
-import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.Button
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,7 +48,6 @@ import com.example.moneyhubandorid.AppBar.BottomBar
 import com.example.moneyhubandorid.AppBar.FinanceTopAppBar
 import com.example.moneyhubandorid.R
 import com.example.moneyhubandorid.Screen
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -88,6 +89,9 @@ fun Espense(navController: NavHostController) {
             //ของปุ่มรายจ่าย
             Text(text = "หน้าเพิ่มรายจ่าย")
             ExpenseIconButtonRow()
+
+            keyboardNum()
+
         }
     }
 }
@@ -145,7 +149,7 @@ fun ExpenseIconButtonRow() {
         )
     }
     Row(
-        horizontalArrangement = Arrangement.Center,
+        horizontalArrangement = Arrangement.Start,
         modifier = Modifier.fillMaxWidth()
     ) {
         ExpenseIconButton2(
@@ -232,12 +236,164 @@ fun ExpenseIconButton2(
     }
 }
 
+@Composable
+fun keyboardNum() {
+    Box(
+        modifier = Modifier
+            .height(380.dp) // ปรับความสูงเล็กน้อย
+            .background(color = Color.Green.copy(alpha = 0.1f))
+    ) {
+        Column {
 
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp) // เพิ่มระยะห่างด้านล่าง
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    TextButton(
+                        onClick = { /*TODO*/ },
+                        modifier = Modifier
+                            .size(48.dp)
+                            .padding(5.dp),
+                        contentPadding = PaddingValues(5.dp)
+                    ) {
+                        Text(text = "เพิ่มคำอธิบาย")
+                    }
 
+                    Text(text = "บัญชีเริ่มต้น(บาท)",
+                        modifier = Modifier
+                            .size(25.dp)
+                            .padding(5.dp)
+                        )
+                }
+            }
 
+            Box {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    modifier = Modifier.fillMaxWidth()
+                ){
+                    IconButton(
+                        onClick = { /* ระบุโค้ดที่ต้องการเมื่อคลิกปุ่ม */ },
+                        modifier = Modifier.size(48.dp) // ปรับขนาดของปุ่ม
+                    ) {
+                        // ระบุไอคอนที่ต้องการแสดง
+                        Icon(Icons.Default.Book, contentDescription = "Booking")
+                    }
+                    TextButton(
+                        onClick = { /* ระบุโค้ดที่ต้องการเมื่อคลิกปุ่ม */ },
+                        modifier = Modifier.size(48.dp), // ปรับขนาดของปุ่ม
+                        contentPadding = PaddingValues(6.dp)
+                    ) {
+                        // ระบุไอคอนที่ต้องการแสดง
+                        Text(text = "วันนี้")
+                    }
+                    IconButton(
+                        onClick = { /* ระบุโค้ดที่ต้องการเมื่อคลิกปุ่ม */ },
+                        modifier = Modifier.size(48.dp) // ปรับขนาดของปุ่ม
+                    ) {
+                        // ระบุไอคอนที่ต้องการแสดง
+                        Icon(Icons.Default.AddCircleOutline, contentDescription = "บวก")
+                    }
+                    IconButton(
+                        onClick = { /* ระบุโค้ดที่ต้องการเมื่อคลิกปุ่ม */ },
+                        modifier = Modifier.size(48.dp) // ปรับขนาดของปุ่ม
+                    ) {
+                        // ระบุไอคอนที่ต้องการแสดง
+                        Icon(Icons.Default.CheckCircle, contentDescription = "ถูก")
+                    }
+                }
+            }
 
+            Box {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    OperationButton(text = "*")
+                    NumberButton(number = "7")
+                    NumberButton(number = "8")
+                    NumberButton(number = "9")
+                }
+            }
+            Box {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    OperationButton(text = "/")
+                    NumberButton(number = "4")
+                    NumberButton(number = "5")
+                    NumberButton(number = "6")
+                }
+            }
+            Box {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    OperationButton(text = "-")
+                    NumberButton(number = "1")
+                    NumberButton(number = "2")
+                    NumberButton(number = "3")
+                }
+            }
+            Box {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    OperationButton(text = "+")
+                    NumberButton(number = ".")
+                    NumberButton(number = "0")
+                    IconXButton()
+                }
+            }
+        }
+    }
+}
 
+@Composable
+fun NumberButton(number: String) {
+    Button(
+        onClick = { /*TODO*/ },
+        modifier = Modifier
+            .size(48.dp)
+            .padding(5.dp) ,// เพิ่ม padding เพื่อเพิ่มขนาด
+        contentPadding = PaddingValues(6.dp)
+    ) {
+        Text(number, fontSize = 16.sp)
+    }
+}
 
+@Composable
+fun OperationButton(text: String) {
+    Button(
+        onClick = { /*TODO*/ },
+        modifier = Modifier
+            .size(48.dp)
+            .padding(5.dp), // เพิ่ม padding เพื่อเพิ่มขนาด
+        contentPadding = PaddingValues(6.dp)
+    ) {
+        Text(text, fontSize = 16.sp)
+    }
+}
 
-
-
+@Composable
+fun IconXButton() {
+    Button(
+        onClick = {
+            // ใส่โค้ดที่ต้องการเมื่อคลิกปุ่ม Icon X
+        },
+        modifier = Modifier
+            .size(48.dp)
+            .padding(5.dp), // เพิ่ม padding เพื่อเพิ่มขนาด
+        contentPadding = PaddingValues(6.dp)
+    ) {
+        Icon(Icons.Default.Cancel, contentDescription = "Clear")
+    }
+}
