@@ -17,4 +17,6 @@ sealed class Screen (val route: String, val name: String, val icon: ImageVector)
     object Finance: Screen(route = "finance_screen", name = "Finance", icon = Icons.Default.Money)
     object Analysis: Screen(route = "analysis_screen", name = "Analysis", icon = Icons.Default.Analytics)
 
+    object Income: Screen(route = "income_screen", name = "Income", icon = Icons.Default.Money)
+    object Espense: Screen(route = "finance_screen", name = "Finance", icon = Icons.Default.Money)
 }
