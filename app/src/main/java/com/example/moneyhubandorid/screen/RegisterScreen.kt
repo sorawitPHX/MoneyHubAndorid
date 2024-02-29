@@ -123,7 +123,7 @@ fun RegisterScreen(navController: NavHostController) {
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    var logoutDialog by remember{mutableStateOf(false)}
+    var logoutDialog by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
@@ -140,7 +140,16 @@ fun RegisterScreen(navController: NavHostController) {
             value = firstname,
             onValueChange = {
                 firstname = it
-                isButtonEnabled = !firstname.isNullOrBlank() && !password.isNullOrEmpty()
+                isButtonEnabled = validateInput(
+                    firstname,
+                    lastname,
+                    birthday,
+                    email,
+                    password,
+                    password_confirm,
+                    careername,
+                    gender
+                )
             },
             label = { Text("ชื่อ") },
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
@@ -155,7 +164,16 @@ fun RegisterScreen(navController: NavHostController) {
             value = lastname,
             onValueChange = {
                 lastname = it
-                isButtonEnabled = !lastname.isNullOrBlank() && !password.isNullOrEmpty()
+                isButtonEnabled = validateInput(
+                    firstname,
+                    lastname,
+                    birthday,
+                    email,
+                    password,
+                    password_confirm,
+                    careername,
+                    gender
+                )
             },
             label = { Text("นามสกุล") },
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
@@ -170,7 +188,16 @@ fun RegisterScreen(navController: NavHostController) {
             value = email,
             onValueChange = {
                 email = it
-                isButtonEnabled = !firstname.isNullOrBlank() && !password.isNullOrEmpty()
+                isButtonEnabled = validateInput(
+                    firstname,
+                    lastname,
+                    birthday,
+                    email,
+                    password,
+                    password_confirm,
+                    careername,
+                    gender
+                )
             },
             label = { Text("อีเมล") },
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
@@ -185,7 +212,16 @@ fun RegisterScreen(navController: NavHostController) {
             value = password,
             onValueChange = {
                 password = it
-                isButtonEnabled = !firstname.isNullOrBlank() && !password.isNullOrEmpty()
+                isButtonEnabled = validateInput(
+                    firstname,
+                    lastname,
+                    birthday,
+                    email,
+                    password,
+                    password_confirm,
+                    careername,
+                    gender
+                )
             },
             label = { Text("รหัสผ่าน") },
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -204,7 +240,16 @@ fun RegisterScreen(navController: NavHostController) {
             value = password_confirm,
             onValueChange = {
                 password_confirm = it
-                isButtonEnabled = !firstname.isNullOrBlank() && !password.isNullOrEmpty()
+                isButtonEnabled = validateInput(
+                    firstname,
+                    lastname,
+                    birthday,
+                    email,
+                    password,
+                    password_confirm,
+                    careername,
+                    gender
+                )
             },
             label = { Text("ยืนยันรหัสผ่าน") },
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -234,7 +279,15 @@ fun RegisterScreen(navController: NavHostController) {
                 focusManager.clearFocus()
                 idcareer = id_careers[careername]!!
                 idgender = id_genders[gender]!!
-                Client.registerUser(firstname, lastname, birthday, email, password, idcareer, idgender)
+                Client.registerUser(
+                    firstname,
+                    lastname,
+                    birthday,
+                    email,
+                    password,
+                    idcareer,
+                    idgender
+                )
                     .enqueue(object : Callback<LoginClass> {
 
                         @SuppressLint("RestrictedApi")
@@ -278,12 +331,31 @@ fun RegisterScreen(navController: NavHostController) {
         ) {
             Text("ลงทะเบียน")
         }
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(5.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            TextButton(
+                onClick = {
+                    keyboardController?.hide()
+                    focusManager.clearFocus()
+                    if (navController.currentBackStack.value.size >= 2) {
+                        navController.popBackStack()
+                    }
+                    navController.navigate(Screen.Login.route)
+                }
+            ) {
+                Text("มีบัญชีแล้ว?")
+            }
+        }
     }
 }
 
-fun validateInput(std_id: String, pass: String): Boolean {
-    return !std_id.isNullOrBlank() && !pass.isNullOrEmpty()
-}
+
 
 @Composable
 fun radioGroup(
@@ -293,7 +365,7 @@ fun radioGroup(
 ) {
     Row(
     ) {
-        mItems.forEach {item ->
+        mItems.forEach { item ->
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -305,7 +377,8 @@ fun radioGroup(
                     enabled = true,
                     colors = RadioButtonDefaults.colors(
                         selectedColor = Color.Magenta
-                    ))
+                    )
+                )
                 Text(
                     text = item,
                     modifier = Modifier.padding(end = 1.dp)
@@ -319,9 +392,9 @@ fun radioGroup(
 fun genderRadioGroupUsage(): String {
     val kinds = listOf("ชาย", "หญิง", "อื่นๆ")
     val (selected, setSelected) = remember {
-        mutableStateOf("")
+        mutableStateOf(kinds[0])
     }
-    Column (
+    Column(
         horizontalAlignment = Alignment.Start,
     ) {
         Text(
@@ -359,7 +432,7 @@ fun DateContent(): String {
         mutableLongStateOf(calendar.timeInMillis)
     }
 
-    if(showDatePicker) {
+    if (showDatePicker) {
         DatePickerDialog(
             onDismissRequest = {
                 showDatePicker = false
@@ -414,7 +487,6 @@ fun DateContent(): String {
 fun CareerDropdown(): String {
     val keyboardController = LocalSoftwareKeyboardController.current
     val CareerList = listOf(
-        "เลือกอาชีพ",
         "นักเรียน/นักศึกษา",
         "ธุรกิจส่วนตัว",
         "ข้าราชการ/พนักงานราชการ",
@@ -467,4 +539,31 @@ fun CareerDropdown(): String {
         }
     }
     return selectedCareer
+}
+
+fun validateInput(
+    firstname: String,
+    lastname: String,
+    birthday: String,
+    email: String,
+    password: String,
+    password_confirm: String,
+    career: String,
+    gender: String
+): Boolean {
+    if (!(firstname.isNullOrBlank() ||
+                lastname.isNullOrBlank() ||
+                birthday.isNullOrBlank() ||
+                email.isNullOrBlank() ||
+                password.isNullOrBlank() ||
+                password_confirm.isNullOrBlank() ||
+                career.isNullOrBlank() ||
+                gender.isNullOrBlank()) &&
+        (password == password_confirm) &&
+        (gender != "เลือกอาชีพ")
+    ) {
+        return true;
+    } else {
+        return false;
+    }
 }

@@ -27,7 +27,7 @@ app.post('/user', function (req, res) {
     var user = req.body
 
     if (!user) {
-        return res.status(400).send({ error: true, message: 'Please provide user ' });
+        return res.status(400).send({ success: 0, message: 'Please provide user ' });
     }
 
     dbConn.query("INSERT INTO users SET ? ", user, function (error, results, fields) {
@@ -41,28 +41,33 @@ app.post('/login', async function (req, res) {
     let password = req.body.password;
 
     if (!email || !password) {
-        return res.status(400).send({ "success": 0, "message": 'Please provide student id and password.' });
+        return res.status(400).send({ "success": 0, "message": 'Please provide email and password.' });
     }
 
     dbConn.query('SELECT * FROM users WHERE email = ?', [email], function (error, results, fields) {
-        if (error) throw error;
-        if (results[0]) {
-            bcrypt.compare(password, results[0].password, function (error, result) {
-                if (error) throw error;
-                if (result) {
-                console.log(results[0])
-                    return res.send({
-                        "success": 1, "iduser": results[0].iduser ,"email": results[0].email, "firstname": results[0].firstname,
-                        "lastname": results[0].lastname, "birthday": results[0].birthday, "profile_photo_path": results[0].profile_photo_path,
-                        "idcareer": results[0].idcareer, "idgender": results[0].idgender
-                    });
-                } else {
-                    return res.send({ "success": 0 });
-                }
-            });
-        } else {
-            return res.send({ "success": 0 });
+        try {
+            if (error) throw error;
+            if (results[0]) {
+                bcrypt.compare(password, results[0].password, function (error, result) {
+                    if (error) throw error;
+                    if (result) {
+                        console.log(results[0])
+                        return res.send({
+                            "success": 1, "iduser": results[0].iduser, "email": results[0].email, "firstname": results[0].firstname,
+                            "lastname": results[0].lastname, "birthday": results[0].birthday, "profile_photo_path": results[0].profile_photo_path,
+                            "idcareer": results[0].idcareer, "idgender": results[0].idgender
+                        });
+                    } else {
+                        return res.send({ "success": 0 });
+                    }
+                });
+            } else {
+                return res.send({ "success": 0 });
+            }
+        } catch (error) {
+            return res.status(400).send({ "success": 0 });
         }
+
     });
 });
 
@@ -99,38 +104,39 @@ app.post('/insertAccount', async function (req, res) {
     });
 });
 
-app.get('/getCareer', async (req, res)=> {
-    dbConn.query('SELECT * FROM careers', null, (error, results, fields)=>{
+
+app.get('/getCareer', async (req, res) => {
+    dbConn.query('SELECT * FROM careers', null, (error, results, fields) => {
         try {
-            if(error) throw error
-            if(results) {
+            if (error) throw error
+            if (results) {
                 return res.status(400).send({
-                    success : 1,
-                    results : results
+                    success: 1,
+                    results: results
                 })
             }
         } catch (error) {
             return res.status(400).send({
-                success : 0,
+                success: 0,
                 results: error
             })
         }
     })
 })
 
-app.get('/getGender', async (req, res)=> {
-    dbConn.query('SELECT * FROM genders', null, (error, results, fields)=>{
+app.get('/getGender', async (req, res) => {
+    dbConn.query('SELECT * FROM genders', null, (error, results, fields) => {
         try {
-            if(error) throw error
-            if(results) {
+            if (error) throw error
+            if (results) {
                 return res.status(400).send({
-                    success : 1,
-                    results : results
+                    success: 1,
+                    results: results
                 })
             }
         } catch (error) {
             return res.status(400).send({
-                success : 0,
+                success: 0,
                 results: error
             })
         }

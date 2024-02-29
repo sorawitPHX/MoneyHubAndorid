@@ -8,5 +8,8 @@ data class LoginClass(
     @SerializedName("success") val success: Int,
 
     @Expose
-    @SerializedName("iduser") val iduser: String
+    @SerializedName("iduser") val iduser: String,
+
+    @Expose
+    @SerializedName("email") val email: String
     )

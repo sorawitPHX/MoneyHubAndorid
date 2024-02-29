@@ -86,8 +86,8 @@ fun LoginScreen(navController: NavHostController) {
                 if (sharePreferences.isLoggedIn) {
                     navController.navigate(Screen.Profile.route)
                 }
-                if (!sharePreferences.userId.isNullOrEmpty()) {
-                    userEmail = sharePreferences.userId ?: "1"
+                if (!sharePreferences.userEmail.isNullOrEmpty()) {
+                    userEmail = sharePreferences.userEmail ?: ""
                 }
             }
         }
@@ -158,6 +158,7 @@ fun LoginScreen(navController: NavHostController) {
                                 if (response.body()!!.success == 1) {
                                     sharePreferences.isLoggedIn = true
                                     sharePreferences.userId = response.body()!!.iduser
+                                    sharePreferences.userEmail = response.body()!!.email
                                     Toast.makeText(
                                         contextForToast,
                                         "Login successfully",
