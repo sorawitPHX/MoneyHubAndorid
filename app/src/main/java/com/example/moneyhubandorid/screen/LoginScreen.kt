@@ -2,6 +2,7 @@ package com.example.moneyhubandorid.screen
 
 import android.annotation.SuppressLint
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,10 +31,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -42,6 +45,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavHostController
 import com.example.moneyhubandorid.LoginClass
+import com.example.moneyhubandorid.R
 import com.example.moneyhubandorid.api.MoneyHubAPI
 import com.example.moneyhubandorid.Screen
 import com.example.moneyhubandorid.SharePreferencesManager
@@ -104,6 +108,12 @@ fun LoginScreen(navController: NavHostController) {
 
     ) {
 
+        Image(
+            imageVector = ImageVector.vectorResource(id = R.drawable.mobile_moneyhub),
+            contentDescription = "moneyhub",
+            modifier = Modifier
+                .padding(all = 16.dp)
+        )
         Text(
             text = "MONEYHUB",
             fontSize = 25.sp
