@@ -88,6 +88,23 @@ app.get('/login', async function(req, res) {
     });
 });
 
+app.get('/getUser', async function(req, res) {
+
+    let email = req.body.email;
+
+    if(!email) {
+        return res.status(400).send({ error: true, message: 'Not have this email' });
+    }
+    dbConn.query('SELECT * FROM users WHERE email = ?', email, function(error, results, fields) {
+        if(error) throw error;
+        if(results[0]) {
+            return res.send(results[0]);
+        } else{
+            return res.status(400).send({ error: true, message: 'This email Not Found!!' });
+        }
+    });
+});
+
 app.post('/insertAccount', async function(req, res) {
 
     let post = req.body;

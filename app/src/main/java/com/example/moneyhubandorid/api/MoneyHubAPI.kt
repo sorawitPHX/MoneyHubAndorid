@@ -32,13 +32,19 @@ interface MoneyHubAPI {
         @Field("idgender") idgender: Int
     ): Call<LoginClass>
 
+
+
     @GET("allCareers")
     fun retrieveCareers(): Call<List<Career>>
 
     @GET("allGenders")
     fun retrieveGenders(): Call<List<Gender>>
 
+    @FormUrlEncoded
+    @POST("insertBookofAccount")
+    fun addBookOfAccount(
 
+    )
 
     companion object {
         fun create(): MoneyHubAPI {

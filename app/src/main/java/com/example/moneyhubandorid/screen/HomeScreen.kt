@@ -164,6 +164,11 @@ fun HomeScreen(navController: NavHostController) {
             notebook_diary()
         }
     }
+//    Column {
+//        LazyColumn(verticalArrangement = Arrangement.spacedBy(6.dp) {
+//            var itemClick =
+//        })
+//    }
 }
 
 
