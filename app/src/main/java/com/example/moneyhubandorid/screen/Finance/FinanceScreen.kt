@@ -78,7 +78,6 @@ fun FinanceScreen(navController: NavHostController) {
 
             Spacer(modifier = Modifier.height(16.dp))
              //ของปุ่มรายจ่าย
-//            Text(text = "หน้าสรุปการเงิน")
             Summary(navController)
         }
     }

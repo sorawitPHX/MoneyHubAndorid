@@ -36,11 +36,21 @@ import com.example.moneyhubandorid.screen.Finance.Summary
 
 @Composable
 fun AnalysisScreen(navController: NavHostController) {
+    val contextForToast = LocalContext.current
 
+    Scaffold(
+        topBar = {
+//            FinanceTopAppBar(navController, contextForToast)
+        },
+        bottomBar = {
+            BottomBar(navController, contextForToast)
+        },
+        floatingActionButtonPosition = FabPosition.End,
+    ) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-        ){
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxHeight(0.25f)
@@ -75,8 +85,7 @@ fun AnalysisScreen(navController: NavHostController) {
                                 startY = 0f,
                                 endY = 1000f
                             )
-                        )
-                    ,contentAlignment = Alignment.Center
+                        ), contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = "Analysis",
@@ -109,6 +118,6 @@ fun AnalysisScreen(navController: NavHostController) {
             }
 
         }
-
     }
+}
 
