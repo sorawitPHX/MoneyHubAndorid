@@ -30,7 +30,7 @@ fun BottomBar(navController: NavController, contextForToast: Context) {
             NavigationBarItem(
                 icon = { Icon(imageVector = screen.icon, contentDescription = null) },
                 label = { Text(text = screen.name) },
-                selected = (selectedScreen == index),
+                selected = (false),
                 onClick = { //this if condition keeps only one screen in the back stack
                     if (navController.currentBackStack.value.size >= 2) {
                         navController.popBackStack()
