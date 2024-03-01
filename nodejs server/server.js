@@ -60,7 +60,7 @@ app.get('/allGenders', function(req, res) {
     });
 });
 
-app.get('/login', async function(req, res) {
+app.post('/login', async function(req, res) {
 
     let email = req.body.email;
     let password = req.body.password;
