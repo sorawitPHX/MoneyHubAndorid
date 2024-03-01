@@ -95,7 +95,20 @@ app.get('/getUser', async function(req, res) {
     if(!email) {
         return res.status(400).send({ error: true, message: 'Not have this email' });
     }
-    dbConn.query('SELECT * FROM users WHERE email = ?', email, function(error, results, fields) {
+    dbConn.query(`
+        SELECT users.iduser AS IDuser,
+               users.firstname AS Firstname,
+               users.lastname AS Lastname,
+               users.birthday AS Birthday,
+               users.profile_photo_path AS Photo_path,
+               careers.career AS Career,
+               genders.gender AS Gender 
+        FROM users 
+        JOIN careers ON users.idcareer = careers.idcareer
+        JOIN genders ON users.idgender = genders.idgender
+        WHERE email = ?`, 
+        email, 
+        function(error, results, fields) {
         if(error) throw error;
         if(results[0]) {
             return res.send(results[0]);
@@ -153,7 +166,6 @@ app.post('/insertBookofAccount', async function(req, res) {
     let post = req.body;
     let iduser = post.iduser;
     let account_book = post.account_book;
-    let balance = post.balance;
     let account_photo_path = post.account_photo_path;
 
     if(!post) {
@@ -166,11 +178,11 @@ app.post('/insertBookofAccount', async function(req, res) {
             return res.status(400).send({ error: true, message: 'This Book Of Account is already in database.' });
         } else {
             if(!account_photo_path) {
-                var insertData = "INSERT INTO account_books(iduser, account_book, balance) VALUES('"
-                                    + iduser + "','" + account_book + "','" + balance + "')"
+                var insertData = "INSERT INTO account_books(iduser, account_book) VALUES('"
+                                    + iduser + "','" + account_book + "')"
             } else {
-                var insertData = "INSERT INTO account_books(iduser, account_book, balance, account_photo_path) VALUES('"
-                                    + iduser + "','" + account_book + "','" + balance + "','" + account_photo_path + "')"
+                var insertData = "INSERT INTO account_books(iduser, account_book, account_photo_path) VALUES('"
+                                    + iduser + "','" + account_book + "','" + account_photo_path + "')"
             }
 
             dbConn.query(insertData, (error, results) => {

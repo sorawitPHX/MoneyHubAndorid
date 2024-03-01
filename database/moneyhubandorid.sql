@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 01, 2024 at 12:22 AM
+-- Generation Time: Mar 01, 2024 at 02:10 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -31,7 +31,7 @@ CREATE TABLE `account_books` (
   `idaccount_book` int(11) NOT NULL,
   `iduser` int(11) NOT NULL,
   `account_book` varchar(255) NOT NULL,
-  `balance` decimal(10,2) NOT NULL,
+  `balance` decimal(10,2) NOT NULL DEFAULT 0.00,
   `account_photo_path` varchar(2048) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
@@ -44,7 +44,8 @@ CREATE TABLE `account_books` (
 
 INSERT INTO `account_books` (`idaccount_book`, `iduser`, `account_book`, `balance`, `account_photo_path`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 8, 'สมุดบันทึกเริ่มต้น', 0.00, NULL, '2024-02-29 18:31:32', '2024-02-29 18:31:32', NULL),
-(2, 8, 'ลูกชาย', 0.00, NULL, '2024-02-29 21:20:46', '2024-02-29 21:20:46', NULL);
+(2, 8, 'ลูกชาย', 0.00, NULL, '2024-02-29 21:20:46', '2024-02-29 21:20:46', NULL),
+(3, 9, 'สมุดบันทึกเริ่มต้น', 0.00, NULL, '2024-03-01 00:24:56', '2024-03-01 00:24:56', NULL);
 
 -- --------------------------------------------------------
 
@@ -208,7 +209,8 @@ INSERT INTO `users` (`iduser`, `firstname`, `lastname`, `birthday`, `email`, `pa
 (5, 'Somchai', 'Boonrueng', '2003-11-27', 'somchai777@gmail.com', '$2a$10$QR7GZ5W8DVHmASBHivso3.un4gBptN7K0XCyatRCVBwidmq6Djve6', NULL, '2024-02-29 17:52:03', '2024-02-29 17:52:03', NULL, 1, 1),
 (6, 'Somruk', 'Kamgaw', '2002-12-23', 'somruk77@gmail.com', '$2a$10$LSSuP35NREIrGmXgAkCt2OICssU9TaFbhMnk7M4cIka7XaSthABC2', NULL, '2024-02-29 18:27:32', '2024-02-29 18:27:32', NULL, 1, 1),
 (7, 'Somjui', 'Kamgaw', '2002-12-27', 'somjui88@gmail.com', '$2a$10$yjdJIuZUUfE29cNxIr2B..rUWsBWHky19d3Oer86mqFTRXjPOtzJ.', NULL, '2024-02-29 18:29:26', '2024-02-29 18:29:26', NULL, 1, 1),
-(8, 'SomHui', 'Kamgaw', '2002-12-20', 'somhui88@gmlolail.com', '$2a$10$GFlBcYbQrnfl4WwmgT11ouLMH75dTEFJpoGxHXXnAWrZEj0WNCv7G', NULL, '2024-02-29 18:31:32', '2024-02-29 18:31:32', NULL, 1, 1);
+(8, 'SomHui', 'Kamgaw', '2002-12-20', 'somhui88@gmlolail.com', '$2a$10$GFlBcYbQrnfl4WwmgT11ouLMH75dTEFJpoGxHXXnAWrZEj0WNCv7G', NULL, '2024-02-29 18:31:32', '2024-02-29 18:31:32', NULL, 1, 1),
+(9, 'Title', 'Roberto', '2003-11-27', 'supawitchtt@gmail.com', '$2a$10$2yy5CjABNsaW1tsCinpfROSHeoVUm9mQmNw2/Nm9xgxSRduXHNssW', NULL, '2024-03-01 00:24:56', '2024-03-01 00:24:56', NULL, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -293,7 +295,7 @@ ALTER TABLE `users_has_categories`
 -- AUTO_INCREMENT for table `account_books`
 --
 ALTER TABLE `account_books`
-  MODIFY `idaccount_book` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idaccount_book` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `careers`
@@ -329,7 +331,7 @@ ALTER TABLE `transactions_types`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables

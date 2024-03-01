@@ -3,6 +3,7 @@ package com.example.moneyhubandorid.api
 import com.example.moneyhubandorid.Career
 import com.example.moneyhubandorid.Gender
 import com.example.moneyhubandorid.LoginClass
+import com.example.moneyhubandorid.ProfileClass
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -32,7 +33,10 @@ interface MoneyHubAPI {
         @Field("idgender") idgender: Int
     ): Call<LoginClass>
 
-
+    @GET("getUser")
+    fun getUser(
+        @Field("email") email: String
+    ): Call<ProfileClass>
 
     @GET("allCareers")
     fun retrieveCareers(): Call<List<Career>>

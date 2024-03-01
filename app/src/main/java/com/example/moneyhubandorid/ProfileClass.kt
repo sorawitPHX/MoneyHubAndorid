@@ -6,14 +6,23 @@ import com.google.gson.annotations.SerializedName
 
 data class ProfileClass(
     @Expose
-    @SerializedName("iduser") val std_id: String,
+    @SerializedName("IDuser") val iduser: Int,
 
     @Expose
-    @SerializedName("std_name") val std_name: String,
+    @SerializedName("Firstname") val firstname: String,
 
     @Expose
-    @SerializedName("std_gender") val std_gender: String,
+    @SerializedName("Lastname") val lastname: String,
 
     @Expose
-    @SerializedName("role") val role: String
+    @SerializedName("Birthday") val birthday: String,
+
+    @Expose
+    @SerializedName("Photo_path") val profile_photo_path: String,
+
+    @Expose
+    @SerializedName("Career") val career: String,
+
+    @Expose
+    @SerializedName("Gender") val gender: String,
 )
