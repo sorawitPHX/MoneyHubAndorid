@@ -108,12 +108,12 @@ fun LoginScreen(navController: NavHostController) {
 
     ) {
 
-        Image(
-            imageVector = ImageVector.vectorResource(id = R.drawable.mobile_moneyhub),
-            contentDescription = "moneyhub",
-            modifier = Modifier
-                .padding(all = 16.dp)
-        )
+//        Image(
+//            imageVector = ImageVector.vectorResource(id = R.drawable.mobile_moneyhub),
+//            contentDescription = "moneyhub",
+//            modifier = Modifier
+//                .padding(all = 16.dp)
+//        )
         Text(
             text = "MONEYHUB",
             fontSize = 25.sp

@@ -88,7 +88,7 @@ app.post('/login', async function(req, res) {
     });
 });
 
-app.get('/getUser', async function(req, res) {
+app.post('/getUser', async function(req, res) {
 
     let email = req.body.email;
 
@@ -193,9 +193,9 @@ app.post('/insertBookofAccount', async function(req, res) {
     });
 });
 
-app.get('/allBookofAccount', async function(req, res) {
+app.get('/allBookofAccount/:iduser', async function(req, res) {
     
-    let iduser = req.body.iduser;
+    let iduser = req.params.iduser;
 
     dbConn.query('SELECT * FROM account_books WHERE iduser = ?', iduser, function(error, results, fields) {
         if(error) throw error;

@@ -3,7 +3,6 @@ package com.example.moneyhubandorid.screen
 import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -34,11 +33,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavHostController
 import com.example.moneyhubandorid.AppBar.BottomBar
-import com.example.moneyhubandorid.ProfileClass
+import com.example.moneyhubandorid.Dataclass.ProfileClass
 import com.example.moneyhubandorid.Screen
 import com.example.moneyhubandorid.SharePreferencesManager
-import com.example.moneyhubandorid.api.StudentAPI
-import com.example.moneyhubandorid.screen.Finance.Summary
+import com.example.moneyhubandorid.api.MoneyHubAPI
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -49,11 +47,11 @@ fun ProfileScreen(navController: NavHostController) {
     lateinit var sharePreferences: SharePreferencesManager
     val contextForToast = LocalContext.current.applicationContext
     sharePreferences = SharePreferencesManager(contextForToast)
-    val userId = sharePreferences.userId ?: ""
-    val Client = StudentAPI.create()
-    val initialStudent = ProfileClass("", "", "", "")
+    val userEmail = sharePreferences.userEmail ?: ""
+    val Client = MoneyHubAPI.create()
+    var initialUser = ProfileClass(0, "", "", "","","","")
     var studentItems by remember {
-        mutableStateOf(initialStudent)
+        mutableStateOf(initialUser)
     }
     var loggotDialog by remember { mutableStateOf(false) }
     var rememberVal by remember {
@@ -68,21 +66,19 @@ fun ProfileScreen(navController: NavHostController) {
             Lifecycle.State.CREATED -> {}
             Lifecycle.State.STARTED -> {}
             Lifecycle.State.RESUMED -> {
-                Client.searchStudent(userId)
+                Client.getUser(userEmail)
                     .enqueue(object : Callback<ProfileClass> {
                         override fun onResponse(
                             call: Call<ProfileClass>,
                             response: Response<ProfileClass>
                         ) {
+                            println(response.body())
                             if (response.isSuccessful) {
-                                studentItems = ProfileClass(
-                                    response.body()!!.std_id, response.body()!!.std_name,
-                                    response.body()!!.std_gender, response.body()!!.role
-                                )
+                                studentItems = response.body()!!
                             } else {
                                 Toast.makeText(
                                     contextForToast,
-                                    "Student ID Not Found",
+                                    "UserEmail Not Found",
                                     Toast.LENGTH_LONG
                                 ).show()
                             }
@@ -127,29 +123,33 @@ fun ProfileScreen(navController: NavHostController) {
                 Text(text = "Profile", fontSize = 25.sp)
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Student ID: $userId\nName: ${studentItems.std_name}\n" +
-                            "Gender: ${studentItems.std_gender}\nRole: ${studentItems.role}",
+                    text = "${studentItems.IDuser}\n" +
+                            "${studentItems.Firstname}\n" +
+                            "${studentItems.Lastname}\n" +
+                            "${studentItems.Birthday}\n" +
+                            "${studentItems.Gender}\n" +
+                            "${studentItems.Career}\n",
                     fontSize = 18.sp
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                val isInvisible = studentItems.role == "admin"
-                Box(
-                    content = {
-                        if (isInvisible) {
-                            Button(
-                                onClick = {
-                                    //Ass 10
-                                },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(50.dp)
-                            ) {
-                                Text("Show all students")
-                            }
-                        }
-                    }
-                )
-                Spacer(modifier = Modifier.height(16.dp))
+                val isInvisible = studentItems.IDuser == 0
+//                Box(
+//                    content = {
+//                        if (isInvisible) {
+//                            Button(
+//                                onClick = {
+//                                    //Ass 10
+//                                },
+//                                modifier = Modifier
+//                                    .fillMaxWidth()
+//                                    .height(50.dp)
+//                            ) {
+//                                Text("Show all students")
+//                            }
+//                        }
+//                    }
+//                )
+//                Spacer(modifier = Modifier.height(16.dp))
                 Button(
                     onClick = {
                         //ทำ Dialog
@@ -202,7 +202,7 @@ fun ProfileScreen(navController: NavHostController) {
                                         Checkbox(
                                             checked = rememberVal,
                                             onCheckedChange = { rememberVal = it })
-                                        Text(text = "Remember your student ID")
+                                        Text(text = "Remember your user ID")
                                     }
                                 }
                             }

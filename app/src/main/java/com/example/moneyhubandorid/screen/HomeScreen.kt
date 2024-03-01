@@ -66,12 +66,19 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.moneyhubandorid.AppBar.BottomBar
 import com.example.moneyhubandorid.AppBar.FinanceTopAppBar
+import com.example.moneyhubandorid.Dataclass.AccountBook
 import com.example.moneyhubandorid.NavGraph
 import com.example.moneyhubandorid.R
 import com.example.moneyhubandorid.Screen
 import com.example.moneyhubandorid.SharePreferencesManager
+import com.example.moneyhubandorid.api.MoneyHubAPI
 import com.example.moneyhubandorid.screen.Finance.ExpenseIconButton
 import com.example.moneyhubandorid.screen.Finance.ExpenseIconButton2
+import okhttp3.Request
+import okio.Timeout
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,6 +86,14 @@ fun HomeScreen(navController: NavHostController) {
     val contextForToast = LocalContext.current.applicationContext
     lateinit var sharePreferences: SharePreferencesManager
     sharePreferences = SharePreferencesManager(context = contextForToast)
+    val userEmail = sharePreferences.userEmail ?: ""
+    val userId = sharePreferences.userId ?: ""
+    val Client = MoneyHubAPI.create()
+
+    var bookSelected by remember {
+        mutableStateOf("")
+    }
+
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val lifecycleState by lifecycleOwner.lifecycle.currentStateFlow.collectAsState()
@@ -89,9 +104,20 @@ fun HomeScreen(navController: NavHostController) {
             Lifecycle.State.CREATED -> {}
             Lifecycle.State.STARTED -> {}
             Lifecycle.State.RESUMED -> {
-                if (sharePreferences.isLoggedIn) {
+                Client.allBookofAccount(userId).enqueue(object : Callback<List<AccountBook>> {
+                    override fun onResponse(
+                        call: Call<List<AccountBook>>,
+                        response: Response<List<AccountBook>>
+                    ) {
+                        println(response.body())
+                        Toast.makeText(contextForToast, "Success Fetch Account Book", Toast.LENGTH_LONG).show()
+                    }
 
-                }
+                    override fun onFailure(call: Call<List<AccountBook>>, t: Throwable) {
+                        Toast.makeText(contextForToast, "Fail Fetch Account Book!!!", Toast.LENGTH_LONG).show()
+                    }
+
+                })
             }
         }
     }
@@ -102,35 +128,6 @@ fun HomeScreen(navController: NavHostController) {
                     Text(text = "สมุดบันทึกเริ่มต้น")
                 },
                 actions = {
-                    // Notifications Icon
-//                    IconButton(
-//                        onClick = {
-//                            Toast.makeText(contextForToast, "Notifications", Toast.LENGTH_SHORT).show()
-//                        }
-//                    ) {
-//                        Icon(
-//                            imageVector = Icons.Outlined.NotificationsNone,
-//                            contentDescription = "Notifications"
-//                        )
-//                    }
-
-                    // Home Icon
-//                    IconButton(
-//                        onClick = {
-//                            Toast.makeText(contextForToast, "Home", Toast.LENGTH_SHORT).show()
-//                        }
-//                    ) {
-//                        Icon(imageVector = Icons.Outlined.Home, contentDescription = "Home")
-//                    }
-
-                    // Vertical 3 dots icon
-//                    IconButton(
-//                        onClick = {
-//                            // handle click
-//                        }
-//                    ) {
-//                        Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Open Menu")
-//                    }
                     TextButton(onClick = { /*TODO*/ }) {
                         Text(
                             text = "รายละเอียด",
@@ -159,7 +156,7 @@ fun HomeScreen(navController: NavHostController) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(text = "หน้าเพิ่มรรายจ่าย")
+//            Text(text = "หน้าเพิ่มรรายจ่าย")
             notebook_diary()
         }
     }
@@ -288,12 +285,11 @@ fun MyTopAppBar(navController: NavHostController, contextForToast: Context) {
     )
 
 
-
 }
 
 
 @Composable
-fun TopAppBarHome (navController: NavHostController){
+fun TopAppBarHome(navController: NavHostController) {
     val contextForToast = LocalContext.current
 
     Scaffold(
@@ -304,7 +300,7 @@ fun TopAppBarHome (navController: NavHostController){
             BottomBar(navController, contextForToast)
         },
         floatingActionButtonPosition = FabPosition.End,
-    ){ paddingValues ->
+    ) { paddingValues ->
         Column(
             modifier =
             Modifier
@@ -318,7 +314,6 @@ fun TopAppBarHome (navController: NavHostController){
             //ของปุ่มรายจ่าย
             Text(text = "หน้าเพิ่มรรายจ่าย")
             notebook_diary()
-
 
 
             // Spacer to create separation
@@ -407,8 +402,8 @@ fun TopAppBarHome (navController: NavHostController){
                 )
             }
         }
-        }
     }
+}
 
 @Composable
 fun notebook_diary() {
@@ -417,7 +412,7 @@ fun notebook_diary() {
         modifier = Modifier.size(200.dp)
     ) {
         ExpenseIconButton(
-            iconRes = R.drawable.book ,
+            iconRes = R.drawable.book,
             label = "สมุดบันทึกแล่ม1",
             onClick = { /*TODO*/ },
             null

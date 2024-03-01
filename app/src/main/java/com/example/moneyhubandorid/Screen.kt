@@ -13,10 +13,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 sealed class Screen (val route: String, val name: String, val icon: ImageVector) {
     object Login: Screen(route = "login_screen", name = "Login",icon = Icons.Default.Login)
     object Register: Screen(route = "register_screen", name = "Register",icon = Icons.Default.Add)
-    object Profile: Screen(route = "profile_screen", name = "Profile",icon = Icons.Default.Person)
-    object Home: Screen(route = "home_screen", name = "Home",icon = Icons.Default.Home)
-    object Finance: Screen(route = "finance_screen", name = "Finance", icon = Icons.Default.Money)
-    object Analysis: Screen(route = "analysis_screen", name = "Analysis", icon = Icons.Default.Analytics)
+    object Profile: Screen(route = "profile_screen", name = "โปรไฟล์",icon = Icons.Default.Person)
+    object Home: Screen(route = "home_screen", name = "หน้าแรก",icon = Icons.Default.Home)
+    object Finance: Screen(route = "finance_screen", name = "การเงิน", icon = Icons.Default.Money)
+    object Analysis: Screen(route = "analysis_screen", name = "การวิเคราะห์", icon = Icons.Default.Analytics)
     object Income: Screen(route = "income_screen", name = "Income", icon = Icons.Default.Money)
     object Expense: Screen(route = "Expense_screen", name = "Expense", icon = Icons.Default.Money)
 
