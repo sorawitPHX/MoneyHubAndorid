@@ -1,12 +1,16 @@
 package com.example.moneyhubandorid.api
 
+import com.example.moneyhubandorid.Career
+import com.example.moneyhubandorid.Gender
 import com.example.moneyhubandorid.LoginClass
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface MoneyHubAPI {
     @FormUrlEncoded
@@ -28,13 +32,13 @@ interface MoneyHubAPI {
         @Field("idgender") idgender: Int
     ): Call<LoginClass>
 
-//    @GET("search/{std_id}")
-//    fun searchStudent(
-//        @Path("std_id") std_id: String
-//    ): Call<ProfileClass>
+    @GET("allCareers")
+    fun retrieveCareers(): Call<List<Career>>
 
-//    @GET("allRegister")
-//    fun retrieveUser(): Call<List<LoginClass>>
+    @GET("allGenders")
+    fun retrieveGenders(): Call<List<Gender>>
+
+
 
     companion object {
         fun create(): MoneyHubAPI {

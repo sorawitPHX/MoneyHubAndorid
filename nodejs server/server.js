@@ -37,7 +37,7 @@ app.post('/user', function(req, res) {
 });
 
 app.get('/category', async function(req, res) {
-
+    
     let idtransaction_types = req.body.idtransaction_types;
 
     dbConn.query('SELECT * FROM categories WHERE idtransaction_types = ?', idtransaction_types, function(error, results, fields) {
@@ -60,7 +60,7 @@ app.get('/allGenders', function(req, res) {
     });
 });
 
-app.post('/login', async function(req, res) {
+app.get('/login', async function(req, res) {
 
     let email = req.body.email;
     let password = req.body.password;
@@ -128,6 +128,139 @@ app.post('/insertAccount', async function(req, res) {
                 return res.send(results);
             });
         }
+    });
+});
+
+app.post('/insertBookofAccount', async function(req, res) {
+
+    let post = req.body;
+    let iduser = post.iduser;
+    let account_book = post.account_book;
+    let balance = post.balance;
+    let account_photo_path = post.account_photo_path;
+
+    if(!post) {
+        return res.status(400).send({ error: true, message: 'Please provide a Book Of Account data' });
+    }
+
+    dbConn.query('SELECT * FROM account_books WHERE account_book = ?', account_book, function(error, results, fields) {
+        if(error) throw error;
+        if(results[0]) {
+            return res.status(400).send({ error: true, message: 'This Book Of Account is already in database.' });
+        } else {
+            if(!account_photo_path) {
+                var insertData = "INSERT INTO account_books(iduser, account_book, balance) VALUES('"
+                                    + iduser + "','" + account_book + "','" + balance + "')"
+            } else {
+                var insertData = "INSERT INTO account_books(iduser, account_book, balance, account_photo_path) VALUES('"
+                                    + iduser + "','" + account_book + "','" + balance + "','" + account_photo_path + "')"
+            }
+
+            dbConn.query(insertData, (error, results) => {
+                if(error) throw error;
+                return res.send(results);
+            });
+        }
+    });
+});
+
+app.get('/allBookofAccount', async function(req, res) {
+    
+    let iduser = req.body.iduser;
+
+    dbConn.query('SELECT * FROM account_books WHERE iduser = ?', iduser, function(error, results, fields) {
+        if(error) throw error;
+        return res.send(results);
+    });
+});
+
+app.post('/insertTransaction', async function(req, res) {
+
+    let post = req.body;
+    let idaccount_book = post.idaccount_book;
+    let idcategory = post.idcategory;
+    let amount = post.amount;
+    let description = post.description;
+
+    if(!post) {
+        return res.status(400).send({ error: true, message: 'Please provide a Transaction data' });
+    }
+
+    var insertTransaction = "INSERT INTO transactions(idaccount_book, idcategory, amount, description) VALUES('"
+                            + idaccount_book + "','" + idcategory + "','" + amount + "','" + description + "')"
+
+    dbConn.query(insertTransaction, (error, results) => {
+        if(error) throw error;
+        return res.send(results);
+    });
+});
+
+app.get('/allTransaction', async function (req, res) {
+
+    let idaccount_book = req.body.idaccount_book;
+
+    dbConn.query(`
+        SELECT transactions.idtransaction AS IDtransaction,
+               transactions_types.type AS Transaction_Type,
+               categories.category AS Category,
+               transactions.amount AS Amount,
+               transactions.description AS Description,
+               transactions.created_at AS Created_at
+        FROM transactions
+        JOIN categories ON transactions.idcategory = categories.idcategory
+        JOIN transactions_types ON categories.idtransaction_types = transactions_types.idtransaction_types
+        WHERE transactions.idaccount_book = ?`,
+        idaccount_book,
+        function (error, results, fields) {
+            if (error) throw error;
+            return res.send(results);
+        }
+    );
+});
+
+app.get('/transaction', async function (req, res) {
+
+    let idtransaction = req.body.idtransaction;
+    
+    dbConn.query(`
+        SELECT transactions.idtransaction AS IDtransaction,
+               transactions_types.type AS Transaction_Type,
+               categories.category AS Category,
+               transactions.amount AS Amount,
+               transactions.description AS Description,
+               transactions.created_at AS Created_at
+        FROM transactions
+        JOIN categories ON transactions.idcategory = categories.idcategory
+        JOIN transactions_types ON categories.idtransaction_types = transactions_types.idtransaction_types
+        WHERE transactions.idtransaction = ?`,
+        idtransaction,
+        function (error, results, fields) {
+            if (error) throw error;
+            return res.send(results);
+        }
+    );
+});
+
+app.put('/updateTransaction', async function (req, res) {
+
+    let idtransaction = req.body.idtransaction;
+    let transdata = req.body;
+
+    dbConn.query('UPDATE transactions SET ? WHERE idtransaction = ?', [transdata, idtransaction], function(error, results, fields) {
+        if(error) throw error;
+        
+        return res.send({ error: false, message: 'Transaction has been updated successfully' });
+    });
+});
+
+app.delete('/deleteTransaction', async function (req, res) {
+
+    let idtransaction = req.body.idtransaction;
+
+    dbConn.query('DELETE FROM transactions WHERE idtransaction = ?', idtransaction, function(error, results, fields) {
+        if(error) throw error;
+        
+        return res.send({ error: false, message: 'Transaction has been deleted successfully' });
     });
 });
 
