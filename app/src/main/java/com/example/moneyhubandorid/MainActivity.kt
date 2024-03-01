@@ -1,5 +1,6 @@
 package com.example.moneyhubandorid
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
@@ -92,6 +93,7 @@ fun MyScreen() {
     NavGraph(navController = navController)
 }
 
+@SuppressLint("RestrictedApi")
 @Composable
 fun MyBottomBar(navController: NavController, contextForToast: Context) {
 

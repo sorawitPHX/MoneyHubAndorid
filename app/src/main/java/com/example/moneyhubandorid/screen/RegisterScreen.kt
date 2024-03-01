@@ -284,7 +284,7 @@ fun RegisterScreen(navController: NavHostController) {
                     gender
                 )
             },
-            label = { Text("ยืนยันรหัสผ่าน") },
+            label = { Text("ยืนยันรหัสผ่าน", fontSize = 18.sp) },
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done,
                 keyboardType = KeyboardType.Password
@@ -295,7 +295,7 @@ fun RegisterScreen(navController: NavHostController) {
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation()
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(14.dp))
 
         birthday = DateContent()
 
