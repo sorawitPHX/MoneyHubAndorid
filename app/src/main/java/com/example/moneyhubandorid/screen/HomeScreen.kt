@@ -160,7 +160,7 @@ fun HomeScreen(navController: NavHostController) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(text = "หน้าเพิ่มรายจ่าย")
+            Text(text = "หน้าเพิ่มรรายจ่าย")
             notebook_diary()
         }
     }
@@ -421,13 +421,13 @@ fun notebook_diary() {
             iconRes = R.drawable.book ,
             label = "สมุดบันทึกแล่ม1",
             onClick = { /*TODO*/ },
-//            modifier = Modifier.size(100.dp) // กำหนดขนาดของปุ่ม
+            null
         )
         ExpenseIconButton(
             iconRes = R.drawable.story,
             label = "เพื่มสมุด",
             onClick = { /*TODO*/ },
-
+            null
         )
     }
 }

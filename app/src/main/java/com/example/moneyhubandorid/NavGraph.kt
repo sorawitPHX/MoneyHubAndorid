@@ -5,7 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.moneyhubandorid.screen.Analysis.AnalysisScreen
-import com.example.moneyhubandorid.screen.Finance.Espense
+import com.example.moneyhubandorid.screen.Finance.Expense
 import com.example.moneyhubandorid.screen.Finance.FinanceScreen
 import com.example.moneyhubandorid.screen.Finance.income
 import com.example.moneyhubandorid.screen.HomeScreen
@@ -54,7 +54,7 @@ fun NavGraph(
 
         composable(route = Screen.Expense.route
         ) {
-            Espense(navController)
+            Expense(navController)
         }
 
         composable(route = Screen.Income.route
