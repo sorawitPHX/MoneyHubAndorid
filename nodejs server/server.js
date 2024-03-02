@@ -218,10 +218,44 @@ app.post('/insertTransaction', async function(req, res) {
     var insertTransaction = "INSERT INTO transactions(idaccount_book, idcategory, amount, description) VALUES('"
                             + idaccount_book + "','" + idcategory + "','" + amount + "','" + description + "')"
 
-    dbConn.query(insertTransaction, (error, results) => {
-        if(error) throw error;
-        return res.send(results);
+    try {
+        dbConn.query(insertTransaction, (error, results) => {
+            if(error) throw error;
+            dbConn.query(`
+            SELECT transactions.idtransaction AS IDtransaction,
+                   transactions.idaccount_book AS IDaccount_book,
+                   transactions.idcategory AS IDcategory,
+                   transactions.amount AS Amount,
+                   categories.idtransaction_types AS IDtransaction_type,
+                   account_books.balance AS Balance 
+            FROM transactions 
+            JOIN categories ON transactions.idcategory = categories.idcategory
+            JOIN account_books ON transactions.idaccount_book = account_books.idaccount_book
+            WHERE transactions.idaccount_book = ? 
+            ORDER BY IDtransaction DESC LIMIT 1`, 
+            idaccount_book, 
+            function(error, results, fields) {
+                if (error) throw error;
+                if (results[0].IDtransaction_type == 1) {
+                    dbConn.query(`UPDATE account_books SET balance = ? WHERE idaccount_book = ?`, [results[0].Balance + results[0].Amount, results[0].IDaccount_book], function(error, results, fields) {
+                        if(error) throw error;
+                        return res.send({ error: false, message: 'Transaction & Account_book has been inserted & updated successfully' });
+                    });
+                } else {
+                    dbConn.query(`UPDATE account_books SET balance = ? WHERE idaccount_book = ?`, [results[0].Balance - results[0].Amount, results[0].IDaccount_book], function(error, results, fields) {
+                        if(error) throw error;
+                        return  res.send({ error: false, message: 'Transaction & Account_book has been inserted & updated successfully' });
+                    });
+                }
+        });
     });
+    } catch (error) {
+        return res.status(400).send({
+            success : 0,
+            results : error
+        })
+    }
+    
 });
 
 app.get('/allTransaction', async function (req, res) {
