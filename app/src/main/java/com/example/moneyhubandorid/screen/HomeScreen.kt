@@ -17,6 +17,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -74,6 +77,7 @@ import com.example.moneyhubandorid.Screen
 import com.example.moneyhubandorid.SharePreferencesManager
 import com.example.moneyhubandorid.api.MoneyHubAPI
 import com.example.moneyhubandorid.screen.Finance.ExpenseIconButton
+import com.example.moneyhubandorid.screen.Finance.ExpenseIconButton2
 import okhttp3.Request
 import okio.Timeout
 import retrofit2.Call
@@ -88,16 +92,17 @@ fun HomeScreen(navController: NavHostController) {
     sharePreferences = SharePreferencesManager(context = contextForToast)
     val userEmail = sharePreferences.userEmail ?: ""
     val userId = sharePreferences.userId ?: ""
-    val Client = MoneyHubAPI.create()
+    val createClient = MoneyHubAPI.create()
 
-    var bookLists = remember {
-        mutableStateListOf<AccountBook>()
-    }
+    var accountBookList = remember { mutableStateListOf<AccountBook>() }
+    var idAccountBook by remember { mutableStateOf(0) }
+    var nameAccountBook by remember { mutableStateOf("") }
 
     var bookSelected by remember {
         mutableStateOf("")
     }
 
+    var nameAcBookForShowInHome: String = ""
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val lifecycleState by lifecycleOwner.lifecycle.currentStateFlow.collectAsState()
@@ -108,32 +113,19 @@ fun HomeScreen(navController: NavHostController) {
             Lifecycle.State.CREATED -> {}
             Lifecycle.State.STARTED -> {}
             Lifecycle.State.RESUMED -> {
-                Client.allBookofAccount(userId).enqueue(object : Callback<List<AccountBook>> {
-                    override fun onResponse(
-                        call: Call<List<AccountBook>>,
-                        response: Response<List<AccountBook>>
-                    ) {
-                        if(response.isSuccessful) {
-                            if(response.body()?.isEmpty() == false) {
-                                println(response.body())
-                                Toast.makeText(contextForToast, "Success Fetch Account Book", Toast.LENGTH_LONG).show()
-                            }
-                        }
-                    }
-
-                    override fun onFailure(call: Call<List<AccountBook>>, t: Throwable) {
-                        Toast.makeText(contextForToast, "Fail Fetch Account Book!!!", Toast.LENGTH_LONG).show()
-                    }
-
-                })
-            }
+                showAllAccountBook(accountBookList, contextForToast, userId)
+            } /// End RESUMED
         }
     }
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(text = "สมุดบันทึกเริ่มต้น")
+                    if (bookSelected == "") {
+                        Text(text = "สมุดบันทึกเริ่มต้น")
+                    } else {
+                        Text(text = bookSelected)
+                    }
                 },
                 actions = {
                     TextButton(onClick = { /*TODO*/ }) {
@@ -165,8 +157,13 @@ fun HomeScreen(navController: NavHostController) {
             Spacer(modifier = Modifier.height(16.dp))
 
 //            Text(text = "หน้าเพิ่มรรายจ่าย")
-            notebook_diary()
+            nameAcBookForShowInHome = notebook_diary(accountBookList)
+
         }
+    }
+    Column {
+        Spacer(modifier = Modifier.height(16.dp))
+        println("Account Book = $nameAcBookForShowInHome")
     }
 //    Column {
 //        LazyColumn(verticalArrangement = Arrangement.spacedBy(6.dp) {
@@ -297,7 +294,7 @@ fun MyTopAppBar(navController: NavHostController, contextForToast: Context) {
 
 
 @Composable
-fun TopAppBarHome(navController: NavHostController) {
+fun TopAppBarHome(accountBookList:MutableList<AccountBook>, navController: NavHostController) {
     val contextForToast = LocalContext.current
 
     Scaffold(
@@ -321,7 +318,7 @@ fun TopAppBarHome(navController: NavHostController) {
             Spacer(modifier = Modifier.height(16.dp))
             //ของปุ่มรายจ่าย
             Text(text = "หน้าเพิ่มรรายจ่าย")
-            notebook_diary()
+            notebook_diary(accountBookList)
 
 
             // Spacer to create separation
@@ -414,24 +411,58 @@ fun TopAppBarHome(navController: NavHostController) {
 }
 
 @Composable
-fun notebook_diary() {
-    Row(
-        horizontalArrangement = Arrangement.Start,
-        modifier = Modifier.size(200.dp)
+fun notebook_diary(accountBookList:MutableList<AccountBook>): String {
+    var selectedBook: String = ""
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(4),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(250.dp)
     ) {
-        ExpenseIconButton(
-            iconRes = R.drawable.book,
-            label = "สมุดบันทึกแล่ม1",
-            onClick = { /*TODO*/ },
-            null
-        )
-        ExpenseIconButton(
-            iconRes = R.drawable.story,
-            label = "เพื่มสมุด",
-            onClick = { /*TODO*/ },
-            null
-        )
+        var itemClick = AccountBook(0, 0, "", 0, 0)
+        itemsIndexed(items = accountBookList) {index, item ->
+            if (item.account_book == "เพิ่มหนังสือ") {
+                ExpenseIconButton(
+                    iconRes = R.drawable.story,
+                    label = selectedBook,
+                    onClick = {  },
+                    null
+                )
+            } else {
+                ExpenseIconButton(
+                    R.drawable.book,
+                    item.account_book,
+                    onClick = { selectedBook = item.account_book },
+                    selectedBook
+                )
+            }
+        }
     }
+    return selectedBook
+}
+
+fun showAllAccountBook(accountBookList:MutableList<AccountBook>, context: Context, userId: String){
+    val createClient = MoneyHubAPI.create()
+    accountBookList.clear()
+    createClient.allBookofAccount(userId)
+        .enqueue(object : Callback<List<AccountBook>> {
+            override fun onResponse(
+                call: Call<List<AccountBook>>,
+                response: Response<List<AccountBook>>
+            ) {
+                response.body()?.forEach {
+                    accountBookList.add(AccountBook(it.idaccount_book, it.iduser, it.account_book, it.balance, it.account_photo_path))
+                }
+                accountBookList.add(AccountBook(0, 0, "เพิ่มหนังสือ", 0, 0))
+            }
+
+            override fun onFailure(call: Call<List<AccountBook>>, t: Throwable) {
+                Toast.makeText(
+                    context, "Error onFailure " + t.message,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
 }
 
 @Composable

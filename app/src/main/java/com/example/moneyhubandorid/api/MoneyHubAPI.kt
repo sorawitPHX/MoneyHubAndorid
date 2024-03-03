@@ -49,13 +49,20 @@ interface MoneyHubAPI {
     @FormUrlEncoded
     @POST("insertBookofAccount")
     fun addBookOfAccount(
-
+        @Field("iduser") iduser: String,
+        @Field("account_book") account_book: String
     )
 
     @GET("allBookofAccount/{iduser}")
     fun allBookofAccount(
         @Path("iduser") iduser: String
     ): Call<List<AccountBook>>
+
+    @FormUrlEncoded
+    @POST("insertTransaction")
+    fun addTransaction(
+
+    )
 
     companion object {
         fun create(): MoneyHubAPI {
