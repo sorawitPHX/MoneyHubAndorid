@@ -167,6 +167,10 @@ fun LoginScreen(navController: NavHostController) {
                     },
                     label = { Text(text = "อีเมล") },
                     placeholder = { Text(text = "Email Address") },
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next
+                    ),
                     leadingIcon = { Icon(Icons.Filled.Email, contentDescription = "Email") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(0.8f)
@@ -184,10 +188,10 @@ fun LoginScreen(navController: NavHostController) {
                     label = { Text("รหัสผ่าน") },
                     placeholder = { Text(text = "Password") },
                     keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Done,
-                        keyboardType = KeyboardType.Password
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Done
                     ),
-
+                    visualTransformation = PasswordVisualTransformation(),
                     leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = "Password") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(0.8f)
