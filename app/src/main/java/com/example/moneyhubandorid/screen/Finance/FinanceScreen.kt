@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.moneyhubandorid.AppBar.BottomBar
 import com.example.moneyhubandorid.AppBar.FinanceTopAppBar
+import com.example.moneyhubandorid.AppBar.SummaryTopAppBar
 //import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.moneyhubandorid.R
 import com.example.moneyhubandorid.Screen
@@ -60,7 +61,7 @@ fun FinanceScreen(navController: NavHostController) {
 
     Scaffold(
         topBar = {
-//            FinanceTopAppBar(navController, contextForToast)
+            SummaryTopAppBar(navController, contextForToast)
         },
         bottomBar = {
             BottomBar(navController, contextForToast)

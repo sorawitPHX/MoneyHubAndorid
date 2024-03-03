@@ -67,12 +67,12 @@ fun FinanceTopAppBar(navController: NavHostController, contextForToast: Context)
     val focusManager = LocalFocusManager.current
     val coroutineScope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
+
     CenterAlignedTopAppBar(
         title = {
             /* ตัวอย่างเช่น */
         },
         actions = {
-            // Notifications icon
             IconButton(
                 onClick = {
                     keyboardController?.hide()
@@ -121,6 +121,83 @@ fun FinanceTopAppBar(navController: NavHostController, contextForToast: Context)
             ) {
                 Icon(Icons.Default.Check, contentDescription = "รายได้")
             }
+        },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = Color.Green.copy(alpha = 0.3f)
+        )
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SummaryTopAppBar(navController: NavHostController, contextForToast: Context) {
+    lateinit var sharePreferences: SharePreferencesManager
+    sharePreferences = SharePreferencesManager(contextForToast)
+    val userId = sharePreferences.userId ?: ""
+    var rememberVal by remember {
+        mutableStateOf(false)
+    }
+    var loggotDialog by remember { mutableStateOf(false) }
+    var expanded by remember {
+        mutableStateOf(false)
+    }
+    val focusManager = LocalFocusManager.current
+    val coroutineScope = rememberCoroutineScope()
+    val keyboardController = LocalSoftwareKeyboardController.current
+    CenterAlignedTopAppBar(
+        title = {
+            /* ตัวอย่างเช่น */
+        },
+        actions = {
+            // Notifications icon
+//            IconButton(
+//                onClick = {
+//                    keyboardController?.hide()
+//                    focusManager.clearFocus()
+//                    if (navController.currentBackStack.value.size >= 2) {
+//                        navController.popBackStack()
+//                    }
+//                    navController.navigate(Screen.Finance.route)
+//                },
+//                modifier = Modifier.size(48.dp) // กำหนดขนาดของปุ่ม
+//            ) {
+//                Icon(Icons.Default.Cancel, contentDescription = null)
+//            }
+            Spacer(modifier = Modifier.weight(1f))
+            // ปุ่ม "ค่าใช้จ่าย"
+            ElevatedButton(
+                onClick = {
+                    coroutineScope.launch {
+                    }
+                    if (navController.currentBackStack.value.size >= 2) {
+                        navController.popBackStack()
+                    }
+                    navController.navigate(Screen.Expense.route)
+                }
+            ) {
+                Text("ค่าใช้จ่าย",color = Color.Black)
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            // ปุ่ม "รายได้"
+            ElevatedButton(
+                onClick = {
+                    if (navController.currentBackStack.value.size >= 2) {
+                        navController.popBackStack()
+                    }
+                    navController.navigate(Screen.Income.route)
+                }
+            ) {
+                Text("รายได้",color = Color.Black)
+            }
+            Spacer(modifier = Modifier.weight(1f))
+//            IconButton(
+//                onClick = {
+//                    /* ตัวอย่างเช่น */
+//                },
+//                modifier = Modifier.size(48.dp)
+//            ) {
+//                Icon(Icons.Default.Check, contentDescription = "รายได้")
+//            }
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = Color.Green.copy(alpha = 0.3f)

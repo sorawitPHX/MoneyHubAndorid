@@ -74,7 +74,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.moneyhubandorid.AppBar.BottomBar
 import com.example.moneyhubandorid.AppBar.FinanceTopAppBar
-import com.example.moneyhubandorid.AppBar.SummmaryScreenTopAppBar
+import com.example.moneyhubandorid.AppBar.SummaryTopAppBar
 import com.example.moneyhubandorid.R
 import com.example.moneyhubandorid.Screen
 import com.example.moneyhubandorid.SharePreferencesManager
@@ -92,7 +92,8 @@ fun Summary(navController: NavHostController) {
 
     Scaffold(
         topBar = {
-            SummmaryScreenTopAppBar(navController, contextForToast)
+
+
         },
         floatingActionButtonPosition = FabPosition.End,
     ) { paddingValues ->
@@ -505,6 +506,9 @@ fun NoteSummaryScreen() {
             }
         }
     }
+
+
+
 
 
 
