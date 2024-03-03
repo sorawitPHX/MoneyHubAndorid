@@ -101,7 +101,7 @@ fun HomeScreen(navController: NavHostController) {
         mutableStateOf("")
     }
 
-    var nameAcBookForShowInHome: String = ""
+    var itemClick by remember { mutableStateOf(AccountBook(0, 0, "", 0, 0)) }
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val lifecycleState by lifecycleOwner.lifecycle.currentStateFlow.collectAsState()
@@ -127,9 +127,14 @@ fun HomeScreen(navController: NavHostController) {
                     }
                 },
                 actions = {
-                    TextButton(onClick = { /*TODO*/ }) {
+                    TextButton(onClick = {
+                        navController.currentBackStackEntry?.savedStateHandle?.set("data",
+                            AccountBook(itemClick.idaccount_book, itemClick.iduser, itemClick.account_book, itemClick.balance, itemClick.account_photo_path)
+                        )
+                        navController.navigate(Screen.EditAccountBook.route)
+                    }) {
                         Text(
-                            text = "รายละเอียด",
+                            text = "แก้ไขสมุดบันทึก",
                             modifier = Modifier
                                 .background(Color.White) // กำหนดกรอบให้กับข้อความ
                         )
@@ -156,13 +161,32 @@ fun HomeScreen(navController: NavHostController) {
             Spacer(modifier = Modifier.height(16.dp))
 
 //            Text(text = "หน้าเพิ่มรรายจ่าย")
-            nameAcBookForShowInHome = notebook_diary(accountBookList)
-
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(4),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(250.dp)
+            ) {
+                itemsIndexed(items = accountBookList) {index, item ->
+                    if (item.account_book == "เพิ่มสมุดบันทึก") {
+                        ExpenseIconButton(
+                            iconRes = R.drawable.story,
+                            label = "เพิ่มสมุดบันทึก",
+                            onClick = { /* Add Account Book */ },
+                            null
+                        )
+                    } else {
+                        ExpenseIconButton(
+                            R.drawable.book,
+                            item.account_book,
+                            onClick = { bookSelected = item.account_book
+                                        itemClick = item},
+                            bookSelected
+                        )
+                    }
+                }
+            }
         }
-    }
-    Column {
-        Spacer(modifier = Modifier.height(16.dp))
-        println("Account Book = $nameAcBookForShowInHome")
     }
 //    Column {
 //        LazyColumn(verticalArrangement = Arrangement.spacedBy(6.dp) {
@@ -295,6 +319,9 @@ fun MyTopAppBar(navController: NavHostController, contextForToast: Context) {
 @Composable
 fun TopAppBarHome(accountBookList:MutableList<AccountBook>, navController: NavHostController) {
     val contextForToast = LocalContext.current
+    var bookSelected by remember {
+        mutableStateOf("")
+    }
 
     Scaffold(
         topBar = {
@@ -317,7 +344,31 @@ fun TopAppBarHome(accountBookList:MutableList<AccountBook>, navController: NavHo
             Spacer(modifier = Modifier.height(16.dp))
             //ของปุ่มรายจ่าย
             Text(text = "หน้าเพิ่มรรายจ่าย")
-            notebook_diary(accountBookList)
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(4),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(250.dp)
+            ) {
+                var itemClick = AccountBook(0, 0, "", 0, 0)
+                itemsIndexed(items = accountBookList) {index, item ->
+                    if (item.account_book == "เพิ่มสมุดบันทึก") {
+                        ExpenseIconButton(
+                            iconRes = R.drawable.story,
+                            label = "เพิ่มสมุดบันทึก",
+                            onClick = {  },
+                            null
+                        )
+                    } else {
+                        ExpenseIconButton(
+                            R.drawable.book,
+                            item.account_book,
+                            onClick = { bookSelected = item.account_book },
+                            bookSelected
+                        )
+                    }
+                }
+            }
 
 
             // Spacer to create separation
@@ -409,37 +460,6 @@ fun TopAppBarHome(accountBookList:MutableList<AccountBook>, navController: NavHo
     }
 }
 
-@Composable
-fun notebook_diary(accountBookList:MutableList<AccountBook>): String {
-    var selectedBook: String = ""
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(4),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(250.dp)
-    ) {
-        var itemClick = AccountBook(0, 0, "", 0, 0)
-        itemsIndexed(items = accountBookList) {index, item ->
-            if (item.account_book == "เพิ่มหนังสือ") {
-                ExpenseIconButton(
-                    iconRes = R.drawable.story,
-                    label = selectedBook,
-                    onClick = {  },
-                    null
-                )
-            } else {
-                ExpenseIconButton(
-                    R.drawable.book,
-                    item.account_book,
-                    onClick = { selectedBook = item.account_book },
-                    selectedBook
-                )
-            }
-        }
-    }
-    return selectedBook
-}
-
 fun showAllAccountBook(accountBookList:MutableList<AccountBook>, context: Context, userId: String){
     val createClient = MoneyHubAPI.create()
     accountBookList.clear()
@@ -452,7 +472,7 @@ fun showAllAccountBook(accountBookList:MutableList<AccountBook>, context: Contex
                 response.body()?.forEach {
                     accountBookList.add(AccountBook(it.idaccount_book, it.iduser, it.account_book, it.balance, it.account_photo_path))
                 }
-                accountBookList.add(AccountBook(0, 0, "เพิ่มหนังสือ", 0, 0))
+                accountBookList.add(AccountBook(0, 0, "เพิ่มสมุดบันทึก", 0, 0))
             }
 
             override fun onFailure(call: Call<List<AccountBook>>, t: Throwable) {
