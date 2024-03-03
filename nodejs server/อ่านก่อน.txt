@@ -1,5 +1,5 @@
 1.  ให้พิมพ์คำสั่งดังต่อไปนี้ใน cmd หรือ terminal(mac only)
-    npm i express body-parser mysql bcryptjs
+    npm i express body-parser mysql bcryptjs multer path
 
 2.  หากต้องการ node server.js
     2.1 ต้องสร้าง database ชื่อ "moneyhubandorid"

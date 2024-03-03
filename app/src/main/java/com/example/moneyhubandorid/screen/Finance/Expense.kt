@@ -82,7 +82,6 @@ var user_description = ""
 @Composable
 fun Expense(navController: NavHostController) {
     val contextForToast = LocalContext.current
-    var expanded by remember { mutableStateOf(false) }
     val navigationItems = listOf(
         Screen.Home,
         Screen.Finance,
@@ -92,9 +91,6 @@ fun Expense(navController: NavHostController) {
     var selectedScreen by remember {
         mutableStateOf(0) // or use mutableStateOf(0)
     }
-    val focusManager = LocalFocusManager.current
-    val coroutineScope = rememberCoroutineScope()
-    val keyboardController = LocalSoftwareKeyboardController.current
 
     var categoryItemList = remember { mutableStateListOf<Category>(
         Category(R.drawable.fast_food,"อาหาร"),
@@ -105,7 +101,7 @@ fun Expense(navController: NavHostController) {
         Category(R.drawable.gift,"ของขวัญ"),
         Category(R.drawable.chat,"สื่อสาร"),
         Category(R.drawable.clothes_rack,"เสื้อผ้า"),
-//        Category(R.drawable.fast_food,"การตั้งค่า"),
+        Category(R.drawable.settings,"การตั้งค่า"),
     ) }
 
     var categorySelected by remember {
@@ -241,7 +237,9 @@ fun keyboardNum() {
     )
 
     var descriptionToggle by remember { mutableStateOf(false) }
+    var bookToggle by remember { mutableStateOf(false)}
     var textFieldDescription by remember { mutableStateOf("") }
+
     @Composable
     fun NumberButton(number: String) {
         Button(
@@ -378,7 +376,7 @@ fun keyboardNum() {
                             onDismissRequest = { timeToggle = false },
 //                            properties = DialogProperties(usePlatformDefaultWidth = true),
                             modifier = Modifier
-//                                .fillMaxSize()
+                                .fillMaxWidth()
                                 .background(
                                     color = MaterialTheme.colorScheme.surface,
                                     shape = RoundedCornerShape(size = 12.dp)
@@ -449,7 +447,9 @@ fun keyboardNum() {
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     IconButton(
-                        onClick = { /* ระบุโค้ดที่ต้องการเมื่อคลิกปุ่ม */ },
+                        onClick = {
+                            bookToggle = true
+                                  },
                         modifier = Modifier.size(48.dp) // ปรับขนาดของปุ่ม
                     ) {
                         // ระบุไอคอนที่ต้องการแสดง
@@ -497,20 +497,6 @@ fun keyboardNum() {
         }
     }
 }
-
-@Composable
-fun OperationButton(text: String) {
-    Button(
-        onClick = { /*TODO*/ },
-        modifier = Modifier
-            .size(48.dp)
-            .padding(5.dp), // เพิ่ม padding เพื่อเพิ่มขนาด
-        contentPadding = PaddingValues(6.dp)
-    ) {
-        Text(text, fontSize = 16.sp)
-    }
-}
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
