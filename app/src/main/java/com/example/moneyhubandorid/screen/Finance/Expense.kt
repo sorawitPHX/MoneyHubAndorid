@@ -1,5 +1,7 @@
 package com.example.moneyhubandorid.screen.Finance
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -10,28 +12,30 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircleOutline
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -43,30 +47,36 @@ import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.DialogProperties
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavHostController
 import com.example.moneyhubandorid.AppBar.BottomBar
 import com.example.moneyhubandorid.AppBar.FinanceTopAppBar
+import com.example.moneyhubandorid.Dataclass.AccountBook
 import com.example.moneyhubandorid.R
-import com.example.moneyhubandorid.Screen
+import com.example.moneyhubandorid.SharePreferencesManager
+import com.example.moneyhubandorid.api.MoneyHubAPI
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -81,32 +91,53 @@ var user_description = ""
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Expense(navController: NavHostController) {
-    val contextForToast = LocalContext.current
-    val navigationItems = listOf(
-        Screen.Home,
-        Screen.Finance,
-        Screen.Analysis,
-        Screen.Profile,
-    )
-    var selectedScreen by remember {
-        mutableStateOf(0) // or use mutableStateOf(0)
+    var categoryItemList = remember {
+        mutableStateListOf<Category>(
+            Category(R.drawable.fast_food, "อาหาร"),
+            Category(R.drawable.calendar_6540110, "รายวัน"),
+            Category(R.drawable.bus_school, "การจราจร"),
+            Category(R.drawable.toast, "ทางสังคม"),
+            Category(R.drawable.house, "ที่อยู่อาศัย"),
+            Category(R.drawable.gift, "ของขวัญ"),
+            Category(R.drawable.chat, "สื่อสาร"),
+            Category(R.drawable.clothes_rack, "เสื้อผ้า"),
+            Category(R.drawable.settings, "การตั้งค่า"),
+        )
     }
-
-    var categoryItemList = remember { mutableStateListOf<Category>(
-        Category(R.drawable.fast_food,"อาหาร"),
-        Category(R.drawable.calendar_6540110,"รายวัน"),
-        Category(R.drawable.bus_school,"การจราจร"),
-        Category(R.drawable.toast,"ทางสังคม"),
-        Category(R.drawable.house,"ที่อยู่อาศัย"),
-        Category(R.drawable.gift,"ของขวัญ"),
-        Category(R.drawable.chat,"สื่อสาร"),
-        Category(R.drawable.clothes_rack,"เสื้อผ้า"),
-        Category(R.drawable.settings,"การตั้งค่า"),
-    ) }
 
     var categorySelected by remember {
         mutableStateOf("")
     }
+
+    var acountbookItemList = remember {
+        mutableStateListOf<AccountBook>()
+    }
+
+    var accountbookSelected by remember {
+        mutableStateOf("")
+    }
+
+    val contextForToast = LocalContext.current
+    lateinit var sharePreferences: SharePreferencesManager
+    sharePreferences = SharePreferencesManager(contextForToast)
+    val userEmail = sharePreferences.userEmail ?: ""
+    val userId = sharePreferences.userId ?: ""
+    val Client = MoneyHubAPI.create()
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val lifecycleState by lifecycleOwner.lifecycle.currentStateFlow.collectAsState()
+    LaunchedEffect(lifecycleState) {
+        when (lifecycleState) {
+            Lifecycle.State.DESTROYED -> {}
+            Lifecycle.State.INITIALIZED -> {}
+            Lifecycle.State.CREATED -> {}
+            Lifecycle.State.STARTED -> {}
+            Lifecycle.State.RESUMED -> {
+                getAllAccountBook(acountbookItemList, contextForToast, userId)
+            }
+        }
+    }
+
+
 
     Scaffold(
         topBar = {
@@ -133,7 +164,7 @@ fun Expense(navController: NavHostController) {
                     .fillMaxWidth()
                     .height(250.dp)
             ) {
-                itemsIndexed(items = categoryItemList) {index, item ->
+                itemsIndexed(items = categoryItemList) { index, item ->
                     ExpenseIconButton(
                         item.icon,
                         item.label,
@@ -166,7 +197,7 @@ fun ExpenseIconButton(
     onClick: () -> Unit,
     selected: String?
 ) {
-    var textcolor = if(label==selected) Color.Green else Color.Black
+    var textcolor = if (label == selected) Color.Green else Color.Black
     IconButton(
         onClick = onClick,
         modifier = Modifier.size(100.dp)
@@ -202,6 +233,34 @@ fun ExpenseIconButton(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun keyboardNum() {
+    var formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    var acountbookItemList = remember {
+        mutableStateListOf<AccountBook>()
+    }
+
+    var accountbookSelected by remember {
+        mutableStateOf(AccountBook(0, 0, "", 0, 0))
+    }
+
+    val contextForToast = LocalContext.current
+    lateinit var sharePreferences: SharePreferencesManager
+    sharePreferences = SharePreferencesManager(contextForToast)
+    val userId = sharePreferences.userId ?: ""
+    val Client = MoneyHubAPI.create()
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val lifecycleState by lifecycleOwner.lifecycle.currentStateFlow.collectAsState()
+    LaunchedEffect(lifecycleState) {
+        when (lifecycleState) {
+            Lifecycle.State.DESTROYED -> {}
+            Lifecycle.State.INITIALIZED -> {}
+            Lifecycle.State.CREATED -> {}
+            Lifecycle.State.STARTED -> {}
+            Lifecycle.State.RESUMED -> {
+                getAllAccountBook(acountbookItemList, contextForToast, userId)
+            }
+        }
+    }
+
     var amount by remember {
         mutableStateOf("0")
     }
@@ -237,7 +296,7 @@ fun keyboardNum() {
     )
 
     var descriptionToggle by remember { mutableStateOf(false) }
-    var bookToggle by remember { mutableStateOf(false)}
+    var bookToggle by remember { mutableStateOf(false) }
     var textFieldDescription by remember { mutableStateOf("") }
 
     @Composable
@@ -247,7 +306,7 @@ fun keyboardNum() {
                 try {
                     amount += number
                     amount = amount.toInt().toString()
-                }catch (_: Exception) {
+                } catch (_: Exception) {
                     amount = amount.toFloat().toString()
                 }
             },
@@ -264,8 +323,8 @@ fun keyboardNum() {
     fun IconXButton() {
         Button(
             onClick = {
-                if(amount.length>=1) {
-                    amount = amount.substring(0, amount.length-1)
+                if (amount.length >= 1) {
+                    amount = amount.substring(0, amount.length - 1)
                 }
             },
             modifier = Modifier
@@ -308,9 +367,9 @@ fun keyboardNum() {
                             .padding(5.dp),
                         contentPadding = PaddingValues(5.dp)
                     ) {
-                        if(textFieldDescription.isNullOrBlank()) {
+                        if (textFieldDescription.isNullOrBlank()) {
                             Text(text = "เพิ่มคำอธิบาย")
-                        }else {
+                        } else {
                             Text(text = "แก้ไขคำอธิบาย")
                         }
                     }
@@ -323,13 +382,14 @@ fun keyboardNum() {
                     )
 
                     if (descriptionToggle) {
-
                         AlertDialog(
                             onDismissRequest = { descriptionToggle = false },
                             title = { Text("เพิ่มคำอธิบาย") },
-                            text = { 
+                            text = {
                                 Column {
-                                     OutlinedTextField(value = textFieldDescription, onValueChange = { textFieldDescription = it })
+                                    OutlinedTextField(
+                                        value = textFieldDescription,
+                                        onValueChange = { textFieldDescription = it })
                                 }
                             },
                             confirmButton = {
@@ -371,7 +431,7 @@ fun keyboardNum() {
                         }
                     }
 
-                    if(timeToggle) {
+                    if (timeToggle) {
                         AlertDialog(
                             onDismissRequest = { timeToggle = false },
 //                            properties = DialogProperties(usePlatformDefaultWidth = true),
@@ -417,6 +477,65 @@ fun keyboardNum() {
                             }
                         }
                     }
+
+                    if (bookToggle) {
+                        AlertDialog(
+                            onDismissRequest = { bookToggle = false },
+                            title = { Text("เลือกสมุดของท่าน") },
+                            text = {
+                                LazyColumn(
+//                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                ) {
+                                    itemsIndexed(items = acountbookItemList) { index, item ->
+                                        ElevatedCard(
+                                            elevation = CardDefaults.cardElevation(
+                                                defaultElevation = 6.dp
+                                            ),
+                                            modifier = Modifier,
+
+                                            onClick = {
+                                                if(accountbookSelected.idaccount_book == item.idaccount_book) {
+                                                    accountbookSelected = AccountBook(0, 0, "", 0, 0)
+                                                }else {
+                                                    accountbookSelected = item
+                                                }
+
+                                            }
+                                        ) {
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically,
+                                                modifier = Modifier
+                                                    .background(if (accountbookSelected.idaccount_book == item.idaccount_book) Color.LightGray else Color.White),
+                                            ) {
+                                                Image(
+                                                    painter = painterResource(R.drawable.book),
+                                                    contentDescription = null,
+                                                    contentScale = ContentScale.Fit,
+                                                    modifier = Modifier.size(40.dp)
+                                                )
+                                                Text(
+                                                    text = "${item.account_book}",
+                                                    modifier = Modifier
+                                                        .padding(16.dp),
+                                                    textAlign = TextAlign.Center,
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            confirmButton = {
+                                TextButton(onClick = {
+                                    bookToggle = false
+                                }) {
+                                    Text("เลือก")
+                                }
+                            }
+                        )
+                    }
                 }
             }
 
@@ -449,7 +568,7 @@ fun keyboardNum() {
                     IconButton(
                         onClick = {
                             bookToggle = true
-                                  },
+                        },
                         modifier = Modifier.size(48.dp) // ปรับขนาดของปุ่ม
                     ) {
                         // ระบุไอคอนที่ต้องการแสดง
@@ -483,7 +602,10 @@ fun keyboardNum() {
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     IconButton(
-                        onClick = { /* ระบุโค้ดที่ต้องการเมื่อคลิกปุ่ม */ },
+                        onClick = {
+                                  println(accountbookSelected)
+                            println("${formatter.format(Date(selectedDate))} ${selectedHour} : ${selectedMinute}")
+                        },
                         modifier = Modifier.size(48.dp) // ปรับขนาดของปุ่ม
                     ) {
                         // ระบุไอคอนที่ต้องการแสดง
@@ -498,127 +620,38 @@ fun keyboardNum() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DateTimeContent(): String {
-    var calendar = Calendar.getInstance()
-    var mYear = calendar.get(Calendar.YEAR)
-    var mMonth = calendar.get(Calendar.MONTH)
-    var mDay = calendar.get(Calendar.DAY_OF_MONTH)
-    calendar.set(mYear, mMonth, mDay)
-    val datePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = calendar.timeInMillis
-    )
-    var datetimeToggle by remember {
-        mutableStateOf(false)
-    }
-    var selectedDate by remember {
-        mutableLongStateOf(calendar.timeInMillis)
-    }
-
-
-
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            modifier = Modifier.padding(5.dp),
-            text = "วันที่"
-        )
-        FilledIconButton(
-            onClick = { datetimeToggle = true }) {
-            Icon(
-                modifier = Modifier.size(size = 25.dp),
-                imageVector = Icons.Outlined.DateRange,
-                contentDescription = "Time Icon"
-            )
-        }
-        var formatter = SimpleDateFormat("dd-MMM-yyy")
-        Text(text = "วันที่ ${formatter.format(Date(selectedDate))}")
-    }
-    return SimpleDateFormat("yyyy-MM-dd").format(Date(selectedDate))
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TimeContent(): Pair<Int, Int> {
-    var selectedHour by remember {
-        mutableIntStateOf(0)
-    }
-    var selectedMinute by remember {
-        mutableIntStateOf(0)
-    }
-    var showDialog by remember {
-        mutableStateOf(false)
-    }
-    val timePickerState = rememberTimePickerState(
-        initialHour = selectedHour,
-        initialMinute = selectedMinute
-    )
-
-    if(showDialog) {
-        AlertDialog(
-            onDismissRequest = { showDialog = false },
-            properties = DialogProperties(usePlatformDefaultWidth = false),
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    color = MaterialTheme.colorScheme.surface,
-                    shape = RoundedCornerShape(size = 12.dp)
-                )
-        ) {
-            Column(
-                modifier = Modifier
-                    .background(
-                        color = Color.LightGray.copy(alpha = 0.3f)
-                    ),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+fun getAllAccountBook(
+    accountBookList: MutableList<AccountBook>,
+    context: Context,
+    userId: String
+) {
+    val createClient = MoneyHubAPI.create()
+    accountBookList.clear()
+    createClient.allBookofAccount(userId)
+        .enqueue(object : Callback<List<AccountBook>> {
+            override fun onResponse(
+                call: Call<List<AccountBook>>,
+                response: Response<List<AccountBook>>
             ) {
-                TimePicker(state = timePickerState)
-                Row(
-                    modifier = Modifier
-                        .padding(top = 6.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    // ปุ่ม Dismiss
-                    TextButton(onClick = { showDialog = false }) {
-                        Text(text = "Dismiss")
-                    }
-
-                    // ปุ่ม Dismiss
-                    TextButton(onClick = {
-                        showDialog = false
-                        selectedHour = timePickerState.hour
-                        selectedMinute = timePickerState.minute
-                    }) {
-                        Text(text = "Confirm")
-                    }
+                response.body()?.forEach {
+                    accountBookList.add(
+                        AccountBook(
+                            it.idaccount_book,
+                            it.iduser,
+                            it.account_book,
+                            it.balance,
+                            it.account_photo_path
+                        )
+                    )
                 }
+//                accountBookList.add(AccountBook(0, 0, "เพิ่มหนังสือ", 0, 0))
             }
-        }
-    }
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-//        verticalAlignment = Alignment.CenterHorizontally,
-        horizontalArrangement = Arrangement.Start
-    ) {
-        Text(
-            modifier = Modifier.padding(5.dp),
-            text = "Select Time"
-        )
-        FilledIconButton(onClick = { showDialog = true }) {
-            Icon(
-                modifier = Modifier.size(size = 30.dp),
-                imageVector = Icons.Outlined.DateRange,
-                contentDescription = "Time Icon"
-            )
-        }
-        Text(text = "(HH:MM) = $selectedHour : $selectedMinute")
-    }
-    return selectedHour to selectedMinute
+
+            override fun onFailure(call: Call<List<AccountBook>>, t: Throwable) {
+                Toast.makeText(
+                    context, "Error onFailure " + t.message,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
 }
