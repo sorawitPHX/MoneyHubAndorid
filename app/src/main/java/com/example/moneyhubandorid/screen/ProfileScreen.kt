@@ -2,6 +2,7 @@ package com.example.moneyhubandorid.screen
 
 import android.annotation.SuppressLint
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,10 +11,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.FabPosition
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -26,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
@@ -120,15 +127,16 @@ fun ProfileScreen(navController: NavHostController) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(modifier = Modifier.height(30.dp))
-                Text(text = "Profile", fontSize = 25.sp)
+                Icon(imageVector = Icons.Default.Person, contentDescription = null, modifier = Modifier.size(30.dp))
+                Text(text = "โปรไฟล์", fontSize = 25.sp)
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "${studentItems.IDuser}\n" +
-                            "${studentItems.Firstname}\n" +
-                            "${studentItems.Lastname}\n" +
-                            "${studentItems.Birthday}\n" +
-                            "${studentItems.Gender}\n" +
-                            "${studentItems.Career}\n",
+                    text = "รหัสผู้ใช้:  ${studentItems.IDuser}\n" +
+                            "ชื่อ:  ${studentItems.Firstname}\n" +
+                            "นามสกุล  ${studentItems.Lastname}\n" +
+                            "วันเกิด:  ${studentItems.Birthday.split("T")[0]}\n" +
+                            "เพศ:  ${studentItems.Gender}\n" +
+                            "อาชีพ:  ${studentItems.Career}\n",
                     fontSize = 18.sp
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -157,9 +165,9 @@ fun ProfileScreen(navController: NavHostController) {
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(50.dp)
+                        .height(50.dp),
                 ) {
-                    Text(text = "Logout")
+                    Text(text = "ลงชื่อออก")
 
                     if (loggotDialog) {
                         AlertDialog(
@@ -181,20 +189,20 @@ fun ProfileScreen(navController: NavHostController) {
                                         navController.navigate(Screen.Login.route)
                                     }
                                 ) {
-                                    Text(text = "Yes")
+                                    Text(text = "ตกลง")
                                 }
                             },
                             dismissButton = {
                                 TextButton(onClick = {
                                     loggotDialog = false
                                 }) {
-                                    Text(text = "No")
+                                    Text(text = "ไม่")
                                 }
                             },
-                            title = { Text(text = "Logout") },
+                            title = { Text(text = "ลงชื่ออก") },
                             text = {
                                 Column {
-                                    Text(text = "Do you want to logout?")
+                                    Text(text = "คุณต้องการลงชื่ออกหรือไม่?")
                                     Row(
                                         horizontalArrangement = Arrangement.Center,
                                         verticalAlignment = Alignment.CenterVertically
@@ -202,7 +210,7 @@ fun ProfileScreen(navController: NavHostController) {
                                         Checkbox(
                                             checked = rememberVal,
                                             onCheckedChange = { rememberVal = it })
-                                        Text(text = "Remember your user ID")
+                                        Text(text = "จำ Email ของคุณไว้")
                                     }
                                 }
                             }

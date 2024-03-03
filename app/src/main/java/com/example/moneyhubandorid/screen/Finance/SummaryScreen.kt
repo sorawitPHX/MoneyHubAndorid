@@ -43,30 +43,12 @@ fun Summary(navController: NavHostController) {
         modifier = Modifier
             .fillMaxSize()
             .padding(5.dp)
-            .background( color = Color.Green.copy(alpha = 0.1f),
+            .background(
+                color = Color.Green.copy(alpha = 0.1f),
                 shape = RoundedCornerShape(16.dp)
             )
             .verticalScroll(scrollState)
     ) {
-        // Header Button with Icon
-//        ElevatedButton(
-//            modifier = Modifier
-//                .align(Alignment.TopEnd)
-//                .padding(8.dp),
-//            onClick = {
-//                Toast.makeText(
-//                    contextForToast,
-//                    "Summary",
-//                    Toast.LENGTH_LONG
-//                ).show()
-//            }
-//        ) {
-//            Row(
-//                verticalAlignment = Alignment.CenterVertically
-//            ) {
-//                Text(text = "การเงิน", color = Color.Black)
-//            }
-//        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()

@@ -45,6 +45,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -90,6 +91,10 @@ fun HomeScreen(navController: NavHostController) {
     val userId = sharePreferences.userId ?: ""
     val Client = MoneyHubAPI.create()
 
+    var bookLists = remember {
+        mutableStateListOf<AccountBook>()
+    }
+
     var bookSelected by remember {
         mutableStateOf("")
     }
@@ -109,8 +114,12 @@ fun HomeScreen(navController: NavHostController) {
                         call: Call<List<AccountBook>>,
                         response: Response<List<AccountBook>>
                     ) {
-                        println(response.body())
-                        Toast.makeText(contextForToast, "Success Fetch Account Book", Toast.LENGTH_LONG).show()
+                        if(response.isSuccessful) {
+                            if(response.body()?.isEmpty() == false) {
+                                println(response.body())
+                                Toast.makeText(contextForToast, "Success Fetch Account Book", Toast.LENGTH_LONG).show()
+                            }
+                        }
                     }
 
                     override fun onFailure(call: Call<List<AccountBook>>, t: Throwable) {
