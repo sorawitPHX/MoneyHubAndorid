@@ -147,7 +147,7 @@ app.post('/getUser', async function (req, res) {
         SELECT users.iduser AS IDuser,
                users.firstname AS Firstname,
                users.lastname AS Lastname,
-               users.birthday AS Birthday,
+               CAST(users.birthday AS VARCHAR(50)) AS Birthday,
                users.profile_photo_path AS Photo_path,
                careers.career AS Career,
                genders.gender AS Gender 
@@ -378,7 +378,7 @@ app.delete('/deleteTransaction', async function (req, res) {
 
 //set port
 app.listen(3000, function () {
-    console.log('Node app is running on port 3000');
+     console.log('Node app is running on port 3000');
 });
 
 module.exports = app;

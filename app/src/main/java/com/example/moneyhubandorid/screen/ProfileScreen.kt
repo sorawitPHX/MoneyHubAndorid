@@ -1,8 +1,10 @@
 package com.example.moneyhubandorid.screen
 
 import android.annotation.SuppressLint
+import android.os.Build
 
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 
 import androidx.compose.animation.expandVertically
@@ -36,6 +38,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -62,7 +65,14 @@ import com.example.moneyhubandorid.api.MoneyHubAPI
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
+import java.util.Date
+import java.util.Locale
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("NotConstructor", "RestrictedApi")
 @Composable
 fun ProfileScreen(navController: NavHostController) {
@@ -72,9 +82,7 @@ fun ProfileScreen(navController: NavHostController) {
     val userEmail = sharePreferences.userEmail ?: ""
     val Client = MoneyHubAPI.create()
     var initialUser = ProfileClass(0, "", "", "","","","")
-    var studentItems by remember {
-        mutableStateOf(initialUser)
-    }
+    var studentItems by remember { mutableStateOf(initialUser) }
     var loggotDialog by remember { mutableStateOf(false) }
     var rememberVal by remember {
         mutableStateOf(false)
@@ -99,6 +107,7 @@ fun ProfileScreen(navController: NavHostController) {
                             println(response.body())
                             if (response.isSuccessful) {
                                 studentItems = response.body()!!
+
                             } else {
                                 Toast.makeText(
                                     contextForToast,
@@ -211,6 +220,7 @@ fun ProfileScreen(navController: NavHostController) {
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
                 Text(text = "ข้อมูลส่วนตัว",fontWeight = FontWeight.SemiBold,
                     fontSize =23.sp)
                 Spacer(modifier = Modifier.height(13.dp))
@@ -236,8 +246,7 @@ fun ProfileScreen(navController: NavHostController) {
                             shape = RoundedCornerShape(25.dp)
                         )
                         .padding(25.dp),
-                    text = "รหัสผู้ใช้ :  ${studentItems.IDuser}\n" +
-                            "ชื่อ :  ${studentItems.Firstname}\n" +
+                    text = "ชื่อ :  ${studentItems.Firstname}\n" +
                             "นามสกุล :  ${studentItems.Lastname}\n" +
                             "วันเกิด :  ${studentItems.Birthday}\n" +
                             "เพศ :  ${studentItems.Gender}\n" +
