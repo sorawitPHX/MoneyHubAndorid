@@ -135,9 +135,9 @@ fun ProfileScreen(navController: NavHostController) {
                 .fillMaxSize()
                 .background(
                     brush = Brush.verticalGradient(
-                        colors = listOf(Color(0xFF98EECC), Color(0xFFD0F5BE)),
+                        colors = listOf(Color(0xFF97EECC), Color(0xFFD0F3BE)),
                         startY = 1f,
-                        endY = LocalDensity.current.run { 400.dp.toPx() }
+                        endY = LocalDensity.current.run { 500.dp.toPx() }
                     )
                 )
                 .padding(paddingValues = paddingValues),
@@ -183,7 +183,8 @@ fun ProfileScreen(navController: NavHostController) {
                         text = "โปรไฟล์",
                         fontSize = 33.sp,
                         fontWeight = FontWeight.SemiBold,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        color = Color.Black
                     )
 
                 }
@@ -194,13 +195,13 @@ fun ProfileScreen(navController: NavHostController) {
                 contentDescription = "Icon",
                 modifier = Modifier.size(185.dp)
             )
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(17.dp))
 
             Text(
                 text = "${studentItems.Firstname} " + " ${studentItems.Lastname}",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.DarkGray
+                color = Color.Magenta
             )
             Spacer(modifier = Modifier.height(6.dp))
 
@@ -212,7 +213,7 @@ fun ProfileScreen(navController: NavHostController) {
             ) {
                 Text(text = "ข้อมูลส่วนตัว",fontWeight = FontWeight.SemiBold,
                     fontSize =23.sp)
-                Spacer(modifier = Modifier.height(15.dp))
+                Spacer(modifier = Modifier.height(13.dp))
 
                 Text(
                     modifier = Modifier
@@ -227,7 +228,7 @@ fun ProfileScreen(navController: NavHostController) {
                                     Color.White.copy(0.9f),
                                     Color.White.copy(0.7f),
                                     Color.White.copy(0.5f),
-                                    Color.White.copy(0.2f)
+                                    Color.White.copy(0.4f)
                                 ),
                                 startY = 0f,
                                 endY = 1000f

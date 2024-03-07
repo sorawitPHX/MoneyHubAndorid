@@ -1,5 +1,6 @@
 package com.example.moneyhubandorid.screen
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -64,6 +65,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -121,7 +123,17 @@ fun HomeScreen(navController: NavHostController) {
             CenterAlignedTopAppBar(
                 title = {
                     if (bookSelected == "") {
-                        Text(text = "สมุดบันทึกเริ่มต้น")
+                        Text(
+                            modifier = Modifier
+                            .padding(
+                                top = 15.dp,
+                                bottom = 10.dp
+                            ),
+                            text = "สมุดบันทึก",
+                            fontSize = 31.sp,
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black)
                     } else {
                         Text(text = bookSelected)
                     }
@@ -134,14 +146,21 @@ fun HomeScreen(navController: NavHostController) {
                         navController.navigate(Screen.EditAccountBook.route)
                     }) {
                         Text(
-                            text = "แก้ไขสมุดบันทึก",
+                            text = "แก้ไขสมุด",
                             modifier = Modifier
-                                .background(Color.White) // กำหนดกรอบให้กับข้อความ
+                                .background(
+                                    color = Color.Magenta,
+                                    shape = RoundedCornerShape(14.dp)
+                                )
+                                .padding(6.dp),
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.White
                         )
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.Green.copy(alpha = 0.3f)
+                    containerColor = Color.Green.copy(alpha = 0.4f)
                 )
             )
         },
@@ -157,10 +176,9 @@ fun HomeScreen(navController: NavHostController) {
             //verticlArangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             Spacer(modifier = Modifier.height(16.dp))
 
-//            Text(text = "หน้าเพิ่มรรายจ่าย")
+//            Text(text = "หน้าเพิ่มรายจ่าย")
             LazyVerticalGrid(
                 columns = GridCells.Fixed(4),
                 modifier = Modifier
@@ -180,8 +198,7 @@ fun HomeScreen(navController: NavHostController) {
                             R.drawable.book,
                             item.account_book,
                             onClick = { bookSelected = item.account_book
-                                        itemClick = item},
-                            bookSelected
+                                        itemClick = item}, bookSelected
                         )
                     }
                 }
@@ -196,6 +213,7 @@ fun HomeScreen(navController: NavHostController) {
 }
 
 
+@SuppressLint("RestrictedApi")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTopAppBar(navController: NavHostController, contextForToast: Context) {
@@ -211,7 +229,7 @@ fun MyTopAppBar(navController: NavHostController, contextForToast: Context) {
     }
     CenterAlignedTopAppBar(
         title = {
-            Text(text = "สมุดบันทึกเริ่มต้น")
+            Text(text = "สมุดบันทึก")
         },
         actions = {
             // Vertical 3 dots icon
@@ -308,7 +326,7 @@ fun MyTopAppBar(navController: NavHostController, contextForToast: Context) {
             }
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color.Green.copy(alpha = 0.3f)
+            containerColor = Color.Green.copy(alpha = 0.4f)
         )
     )
 
@@ -343,7 +361,7 @@ fun TopAppBarHome(accountBookList:MutableList<AccountBook>, navController: NavHo
 
             Spacer(modifier = Modifier.height(16.dp))
             //ของปุ่มรายจ่าย
-            Text(text = "หน้าเพิ่มรรายจ่าย")
+            Text(text = "หน้าเพิ่มรายจ่าย")
             LazyVerticalGrid(
                 columns = GridCells.Fixed(4),
                 modifier = Modifier
@@ -370,7 +388,6 @@ fun TopAppBarHome(accountBookList:MutableList<AccountBook>, navController: NavHo
                 }
             }
 
-
             // Spacer to create separation
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -394,7 +411,6 @@ fun TopAppBarHome(accountBookList:MutableList<AccountBook>, navController: NavHo
 
             // Row with Buttons and Icons
 
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -403,7 +419,7 @@ fun TopAppBarHome(accountBookList:MutableList<AccountBook>, navController: NavHo
                         bottom = 20.dp
                     )
                     .background(
-                        color = Color.Green.copy(alpha = 0.1f),
+                        color = Color.Green.copy(alpha = 0.2f),
                         shape = RoundedCornerShape(16.dp)
                     )
                     .padding(25.dp),
