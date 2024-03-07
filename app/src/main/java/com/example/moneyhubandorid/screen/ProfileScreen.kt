@@ -1,8 +1,14 @@
 package com.example.moneyhubandorid.screen
 
 import android.annotation.SuppressLint
-import android.text.style.BackgroundColorSpan
+
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,15 +20,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Login
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.FabPosition
@@ -80,6 +82,7 @@ fun ProfileScreen(navController: NavHostController) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val lifecycleState by lifecycleOwner.lifecycle.currentStateFlow.collectAsState()
 
+
     LaunchedEffect(lifecycleState) {
         when (lifecycleState) {
             Lifecycle.State.DESTROYED -> {}
@@ -133,7 +136,7 @@ fun ProfileScreen(navController: NavHostController) {
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(Color(0xFF98EECC), Color(0xFFD0F5BE)),
-                        startY = 0.9f,
+                        startY = 1f,
                         endY = LocalDensity.current.run { 400.dp.toPx() }
                     )
                 )
@@ -185,13 +188,21 @@ fun ProfileScreen(navController: NavHostController) {
 
                 }
             }
-            Spacer(modifier = Modifier.height(22.dp))
+            Spacer(modifier = Modifier.height(15.dp))
             Image(
                 painter = painterResource(id = R.drawable.profile),
                 contentDescription = "Icon",
                 modifier = Modifier.size(185.dp)
             )
             Spacer(modifier = Modifier.height(15.dp))
+
+            Text(
+                text = "${studentItems.Firstname} " + " ${studentItems.Lastname}",
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.DarkGray
+            )
+            Spacer(modifier = Modifier.height(6.dp))
 
             Column(
                 modifier = Modifier
@@ -207,7 +218,7 @@ fun ProfileScreen(navController: NavHostController) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(
-                            start = 10.dp, end = 10.dp
+                            start = 13.dp, end = 13.dp
                         )
                         .background(
                             brush = Brush.verticalGradient(
@@ -216,7 +227,7 @@ fun ProfileScreen(navController: NavHostController) {
                                     Color.White.copy(0.9f),
                                     Color.White.copy(0.7f),
                                     Color.White.copy(0.5f),
-                                    Color.White.copy(0.1f)
+                                    Color.White.copy(0.2f)
                                 ),
                                 startY = 0f,
                                 endY = 1000f
@@ -233,7 +244,7 @@ fun ProfileScreen(navController: NavHostController) {
                     fontSize = 20.sp,
                     color = Color.Black
                 )
-                Spacer(modifier = Modifier.height(46.dp))
+                Spacer(modifier = Modifier.height(35.dp))
 
                 val isInvisible = studentItems.IDuser == 0
 
@@ -250,58 +261,75 @@ fun ProfileScreen(navController: NavHostController) {
                     Image(
                         painter = painterResource(id = R.drawable.exit),
                         contentDescription = "Icon",
-                        modifier = Modifier.size(38.dp).padding(9.dp)
+                        modifier = Modifier.size(30.dp).padding(end = 8.dp)
                     )
-                    Text(text = "ลงชื่อออก",fontSize = 20.sp,fontWeight = FontWeight.SemiBold,)
+                    Text(
+                        text = "ลงชื่อออก",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                }
 
-                    if (loggotDialog) {
-                        AlertDialog(
-                            onDismissRequest = {
-                                loggotDialog = false
-                            },
-                            confirmButton = {
-                                TextButton(
-                                    onClick = {
-                                        loggotDialog = false
-                                        if (rememberVal) {
-                                            sharePreferences.clearUserLogin()
-                                        } else {
-                                            sharePreferences.clearUserAll()
-                                        }
-                                        if (navController.currentBackStack.value.size >= 2) {
-                                            navController.popBackStack()
-                                        }
-                                        navController.navigate(Screen.Login.route)
-                                    }
-                                ) {
-                                    Text(text = "ตกลง")
-                                }
-                            },
-                            dismissButton = {
-                                TextButton(onClick = {
+                AnimatedVisibility(
+                    visible = loggotDialog,
+                    enter = slideInVertically(
+                        initialOffsetY = { it }
+                    ) + expandVertically(
+                        expandFrom = Alignment.Top
+                    ),
+                    exit = slideOutVertically(
+                        targetOffsetY = { it }
+                    ) + shrinkVertically(
+                        shrinkTowards = Alignment.Top
+                    )
+                ) {
+                    AlertDialog(
+                        onDismissRequest = {
+                            loggotDialog = false
+                        },
+                        confirmButton = {
+                            TextButton(
+                                onClick = {
                                     loggotDialog = false
-                                }) {
-                                    Text(text = "ยกเลิก")
-                                }
-                            },
-                            title = { Text(text = "ลงชื่อออก") },
-                            text = {
-                                Column {
-                                    Text(text = "คุณต้องการลงชื่อออกหรือไม่?",fontSize = 18.sp)
-                                    Row(
-                                        horizontalArrangement = Arrangement.Center,
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Checkbox(
-                                            checked = rememberVal,
-                                            onCheckedChange = { rememberVal = it })
-                                        Text(text = "จำ Email ของคุณไว้",fontSize = 16.sp)
+                                    if (rememberVal) {
+                                        sharePreferences.clearUserLogin()
+                                    } else {
+                                        sharePreferences.clearUserAll()
                                     }
+                                    if (navController.currentBackStack.value.size >= 2) {
+                                        navController.popBackStack()
+                                    }
+                                    navController.navigate(Screen.Login.route)
+                                }
+                            ) {
+                                Text(text = "ตกลง")
+                            }
+                        },
+                        dismissButton = {
+                            TextButton(onClick = {
+                                loggotDialog = false
+                            }) {
+                                Text(text = "ยกเลิก")
+                            }
+                        },
+                        title = { Text(text = "ลงชื่อออก") },
+                        text = {
+                            Column {
+                                Text(text = "คุณต้องการลงชื่อออกหรือไม่?",fontSize = 18.sp)
+                                Row(
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Checkbox(
+                                        checked = rememberVal,
+                                        onCheckedChange = { rememberVal = it })
+                                    Text(text = "จำ Email ของคุณไว้",fontSize = 16.sp)
                                 }
                             }
-                        )
-                    }
+                        }
+                    )
                 }
+
             }
         }
     }
