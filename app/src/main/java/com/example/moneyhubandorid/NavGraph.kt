@@ -1,12 +1,16 @@
 package com.example.moneyhubandorid
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.moneyhubandorid.screen.Analysis.AnalysisScreen
+import com.example.moneyhubandorid.screen.EditAccountBookScreen
 import com.example.moneyhubandorid.screen.Finance.Expense
 import com.example.moneyhubandorid.screen.Finance.FinanceScreen
+import com.example.moneyhubandorid.screen.Finance.InsertAccountBookScreen
 import com.example.moneyhubandorid.screen.Finance.income
 import com.example.moneyhubandorid.screen.HomeScreen
 import com.example.moneyhubandorid.screen.LoginScreen
@@ -65,6 +69,16 @@ fun NavGraph(
         composable(route = Screen.Summary.route
         ) {
 
+        }
+
+        composable(route = Screen.EditAccountBook.route
+        ) {
+            EditAccountBookScreen(navController)
+        }
+
+        composable(route = Screen.InsertAccountBook.route
+        ) {
+            InsertAccountBookScreen(navController)
         }
 
 

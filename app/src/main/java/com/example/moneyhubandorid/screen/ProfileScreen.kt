@@ -72,7 +72,6 @@ import java.time.format.DateTimeParseException
 import java.util.Date
 import java.util.Locale
 
-@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("NotConstructor", "RestrictedApi")
 @Composable
 fun ProfileScreen(navController: NavHostController) {

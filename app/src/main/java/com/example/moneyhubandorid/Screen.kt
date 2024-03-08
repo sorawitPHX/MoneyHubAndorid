@@ -2,6 +2,7 @@ package com.example.moneyhubandorid
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddCard
 import androidx.compose.material.icons.filled.Analytics
 import androidx.compose.material.icons.filled.Construction
 import androidx.compose.material.icons.filled.Home
@@ -22,4 +23,5 @@ sealed class Screen (val route: String, val name: String, val icon: ImageVector)
     object Expense: Screen(route = "Expense_screen", name = "Expense", icon = Icons.Default.Money)
     object Summary: Screen(route = "summary_screen", name = "Summary", icon = Icons.Default.MonetizationOn)
     object EditAccountBook: Screen(route = "editaccountbook_screen", name = "EditAccountBook", icon = Icons.Default.Construction)
+    object InsertAccountBook: Screen(route = "insertaccountbook_screen", name = "InsertAccountBook", icon = Icons.Default.AddCard)
 }

@@ -329,6 +329,18 @@ app.get('/allTransaction', async function (req, res) {
     );
 });
 
+app.put('/updateAccountBook/:idaccount_book', async function (req, res) {
+
+    let idaccount_book = req.params.idaccount_book;
+    let account_book = req.body.account_book;
+
+    dbConn.query('UPDATE account_books SET account_book = ? WHERE idaccount_book = ?', [account_book, idaccount_book], function (error, results, fields) {
+        if (error) throw error;
+
+        return res.send({ error: false, message: 'Account Book has been updated successfully' });
+    });
+});
+
 app.get('/transaction', async function (req, res) {
 
     let idtransaction = req.body.idtransaction;

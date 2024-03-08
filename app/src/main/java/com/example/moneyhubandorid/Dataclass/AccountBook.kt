@@ -20,5 +20,5 @@ data class AccountBook(
     @SerializedName("balance") val balance: Int,
 
     @Expose
-    @SerializedName("account_photo_path") val account_photo_path: Int,
+    @SerializedName("account_photo_path") val account_photo_path: Int
 ): Parcelable

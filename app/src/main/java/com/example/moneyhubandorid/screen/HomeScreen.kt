@@ -190,7 +190,12 @@ fun HomeScreen(navController: NavHostController) {
                         ExpenseIconButton(
                             iconRes = R.drawable.story,
                             label = "เพิ่มสมุดบันทึก",
-                            onClick = { /* Add Account Book */ },
+                            onClick = {
+                                      if (navController.currentBackStack.value.size >= 2) {
+                                          navController.popBackStack()
+                                      }
+                                navController.navigate(Screen.InsertAccountBook.route)
+                            },
                             null
                         )
                     } else {

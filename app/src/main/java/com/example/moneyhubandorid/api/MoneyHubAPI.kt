@@ -12,6 +12,7 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface MoneyHubAPI {
@@ -51,7 +52,7 @@ interface MoneyHubAPI {
     fun addBookOfAccount(
         @Field("iduser") iduser: String,
         @Field("account_book") account_book: String
-    )
+    ): Call<AccountBook>
 
     @GET("allBookofAccount/{iduser}")
     fun allBookofAccount(
@@ -59,10 +60,11 @@ interface MoneyHubAPI {
     ): Call<List<AccountBook>>
 
     @FormUrlEncoded
-    @POST("insertTransaction")
-    fun addTransaction(
-
-    )
+    @PUT("updateAccountBook/{idaccount_book}")
+    fun updateAccountBook(
+        @Path("idaccount_book") idaccount_book: Int,
+        @Field("account_book") account_book: String
+    ): Call<AccountBook>
 
     companion object {
         fun create(): MoneyHubAPI {
