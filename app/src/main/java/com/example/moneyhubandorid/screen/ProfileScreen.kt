@@ -22,7 +22,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.AlertDialog
@@ -143,12 +145,13 @@ fun ProfileScreen(navController: NavHostController) {
                 .fillMaxSize()
                 .background(
                     brush = Brush.verticalGradient(
-                        colors = listOf(Color(0xFF97EECC), Color(0xFFD0F3BE)),
+                        colors = listOf(Color(0xFF7DFFCC), Color(0xFFD1FFAD)),
                         startY = 1f,
                         endY = LocalDensity.current.run { 500.dp.toPx() }
                     )
                 )
-                .padding(paddingValues = paddingValues),
+                .padding(paddingValues = paddingValues)
+            .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             // verticalArrangement = Arrangement.Center
         ) {
@@ -168,7 +171,7 @@ fun ProfileScreen(navController: NavHostController) {
                                     Color.White.copy(0.7f),
                                     Color.White.copy(0.3f),
                                     Color.White.copy(0.2f),
-                                    Color.White.copy(0.1f)
+                                    Color.White.copy(0.2f)
                                 ),
                                 startY = 0f,
                                 endY = 1000f
@@ -178,7 +181,7 @@ fun ProfileScreen(navController: NavHostController) {
                     Icon(
                         imageVector = Icons.Default.Person,
                         contentDescription = null,
-                        modifier = Modifier.size(55.dp).padding(start = 10.dp, top = 23.dp)
+                        modifier = Modifier.size(60.dp).padding(start = 10.dp, top = 23.dp)
                     )
                     Text(
                         modifier = Modifier
@@ -186,7 +189,7 @@ fun ProfileScreen(navController: NavHostController) {
                             .padding(
                                 end = 47.dp,
                                 top = 20.dp,
-                                bottom = 8.dp
+                                bottom = 9.dp
                             ),
                         text = "โปรไฟล์",
                         fontSize = 33.sp,
@@ -201,13 +204,13 @@ fun ProfileScreen(navController: NavHostController) {
             Image(
                 painter = painterResource(id = R.drawable.profile),
                 contentDescription = "Icon",
-                modifier = Modifier.size(185.dp)
+                modifier = Modifier.size(187.dp)
             )
             Spacer(modifier = Modifier.height(17.dp))
 
             Text(
                 text = "${studentItems.Firstname} " + " ${studentItems.Lastname}",
-                fontSize = 28.sp,
+                fontSize = 29.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Magenta
             )
@@ -222,7 +225,7 @@ fun ProfileScreen(navController: NavHostController) {
 
                 Text(text = "ข้อมูลส่วนตัว",fontWeight = FontWeight.SemiBold,
                     fontSize =23.sp)
-                Spacer(modifier = Modifier.height(13.dp))
+                Spacer(modifier = Modifier.height(14.dp))
 
                 Text(
                     modifier = Modifier
@@ -250,10 +253,10 @@ fun ProfileScreen(navController: NavHostController) {
                             "วันเกิด :  ${studentItems.Birthday}\n" +
                             "เพศ :  ${studentItems.Gender}\n" +
                             "อาชีพ :  ${studentItems.Career}\n",
-                    fontSize = 20.sp,
+                    fontSize = 21.sp,
                     color = Color.Black
                 )
-                Spacer(modifier = Modifier.height(35.dp))
+                Spacer(modifier = Modifier.height(30.dp))
 
                 val isInvisible = studentItems.IDuser == 0
 
@@ -270,7 +273,7 @@ fun ProfileScreen(navController: NavHostController) {
                     Image(
                         painter = painterResource(id = R.drawable.exit),
                         contentDescription = "Icon",
-                        modifier = Modifier.size(30.dp).padding(end = 8.dp)
+                        modifier = Modifier.size(32.dp).padding(end = 8.dp)
                     )
                     Text(
                         text = "ลงชื่อออก",
@@ -278,6 +281,7 @@ fun ProfileScreen(navController: NavHostController) {
                         fontWeight = FontWeight.SemiBold,
                     )
                 }
+                Spacer(modifier = Modifier.height(10.dp))
 
                 AnimatedVisibility(
                     visible = loggotDialog,
